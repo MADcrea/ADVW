@@ -46,12 +46,14 @@ public class HUD2_display : MonoBehaviour
         if (Intel_UI.alpha == 0){
              Intel_UI.alpha = 1;
              Intel_UI.interactable = true;
+             Intel_UI.blocksRaycasts = true;
             //Change UI_Manager step value
             UI_values.Step="Intel";
  
         }else{
              Intel_UI.alpha = 0;
              Intel_UI.interactable = false;
+             Intel_UI.blocksRaycasts =false ;
              UI_values.Step ="none";
         }  
         
@@ -63,6 +65,7 @@ public class HUD2_display : MonoBehaviour
          if (Attack_UI.alpha == 0){
              Attack_UI.alpha = 1;
              Attack_UI.interactable = true;
+             Attack_UI.blocksRaycasts =true;
              UI_values.Step="Attack A";
  
          }else{
@@ -91,6 +94,7 @@ public class HUD2_display : MonoBehaviour
         //Fermeture UI_Attack
         Attack_UI.alpha = 0;
         Attack_UI.interactable = false;
+        Attack_UI.blocksRaycasts =false;
         UI_values.Step ="none";
         ElementA = "";
         ElementB ="";
@@ -141,6 +145,7 @@ public class HUD2_display : MonoBehaviour
          if (Move_UI.alpha == 0){
              Move_UI.alpha = 1;
              Move_UI.interactable = true;
+             Move_UI.blocksRaycasts =true;
              UI_values.Step ="Move A";
  
          }else{
@@ -169,6 +174,7 @@ public class HUD2_display : MonoBehaviour
         //Fermeture UI_Move
         Move_UI.alpha = 0;
         Move_UI.interactable = false;
+        Move_UI.blocksRaycasts =false;
         UI_values.Step ="none";
         ElementA = "";
         ElementB ="";
@@ -195,6 +201,7 @@ public class HUD2_display : MonoBehaviour
          if (SD_UI.alpha == 0){
              SD_UI.alpha = 1;
              SD_UI.interactable = true;
+             SD_UI.blocksRaycasts =true;
              UI_values.Step ="SD";
  
          }else{
@@ -217,6 +224,7 @@ public class HUD2_display : MonoBehaviour
         //Fermeture UI_SD
         SD_UI.alpha =0;
         SD_UI.interactable =false;
+        SD_UI.blocksRaycasts =false;
         UI_values.Step ="none";
         ElementA = "";
 

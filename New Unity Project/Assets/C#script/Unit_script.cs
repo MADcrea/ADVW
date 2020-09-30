@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-const float CASE_SIZE = 1.8f;
-
 public class Unit_script : MonoBehaviour
 {
 public string type;
@@ -197,8 +195,7 @@ public string Case;
 
             if(Attacker_values.name!=name && Attacker_values.Owner!=Owner) //Owner must be different
             {
-                if(Vector3.Distance(Attacker.transform.position,transform.position)
-                <Attacker_values.Aim_limit *CASE_SIZE)
+                if(Vector3.Distance(Attacker.transform.position,transform.position)< Attacker_values.Aim_limit *1.8)
                 {
                     string description =
                     type                +"\n"+"\r"+ //type
