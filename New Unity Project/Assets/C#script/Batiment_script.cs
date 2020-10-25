@@ -10,7 +10,7 @@ public class Batiment_script : MonoBehaviour
     public Vector3 Position;
     public string Case;
     public string Effect;
-    public string Owner;
+    public int Owner;
 
     // Start is called before the first frame update
     void Start()

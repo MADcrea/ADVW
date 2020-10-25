@@ -8,10 +8,25 @@ public class Case_script : MonoBehaviour
     //Case property
     public Vector3 Position;
     public Material Terrain;
-    public string Owning_control;
-    public string Occupation;
+    public int  Owning_control;
+    
+    public Unit_script OccupingUnit;
+    public Batiment_script OccupingBuilding;
+    public enum OccupationType
+    {
+        Unit,
+        Building,
+        Free
+    }
+
+    public int id;
+    public OccupationType Occupation;
+
+
     public bool Supply;
     public int voisin_index;
+
+    private List <Case_script> Cases_voisines= new List<Case_script>();
     public List<string> Cases_libres_voisines =new List<string>();
     public List<string> Cases_batiment_voisines =new List<string>();
     public List<string> Cases_ennemies_voisines =new List<string>();
@@ -22,48 +37,36 @@ public class Case_script : MonoBehaviour
     public GameObject Board;
     public Case_script Actual_property;
     public GameObject UI_case_Prefab;
-    
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        Owning_control ="none";
+        Owning_control =-1;
         Supply =false;
-        Occupation="free";
+        Occupation=OccupationType.Free;
         BatimentPrefab =Resources.Load<GameObject>("fixe/Batiment");
         Cases_libres_voisines.Clear();
         Cases_batiment_voisines.Clear();
-        Cases_ennemies_voisines.Clear();        
+        Cases_ennemies_voisines.Clear();
      }
     // Update is called once per frame
     void Update()
     {        
         
      }
-    public void Find_Batiments_Adjacents()
+    bool HasCaseAnAdjacentBuilding()
     {
-        Cases_batiment_voisines.Clear();
-        //Load Plateau intel
-        Board = GameObject.Find("Plateau");
-        Plateau_script plateau_property = Board.GetComponent<Plateau_script>();
-
-        // Verif position toutes les cases
-
-        for (int i=1;i<=plateau_property.id-1;i++){
-            //Load Case intel
-            if("Case n°" + i != name){
-                Actual_property = GameObject.Find("/Case n°" + i).GetComponent<Case_script>();
-
-                /*Si la case adjacente contient un batiment, ca compte pour une case occupée par un batiment*/
-                if( Vector3.Distance(Actual_property.Position,Position)<=1.8 
-                    && Vector3.Distance(Actual_property.Position,Position)>0
-                    && Actual_property.Occupation == "Building")
-                {
-                    Cases_batiment_voisines.Add(Actual_property.name);
-                 }
+        bool returnValue = false;
+        foreach(Case_script CaseVoisine in Cases_voisines)
+        {
+            if (CaseVoisine.Occupation == OccupationType.Building)
+            {
+                returnValue = true;
             }
-        } 
+        }
+        return returnValue;
     }
+    
     public void Find_Free_Adjacentes()
     {
         Cases_libres_voisines.Clear();
@@ -73,7 +76,7 @@ public class Case_script : MonoBehaviour
 
         // Verif position toutes les cases
 
-        for (int i=1;i<=plateau_property.id-1;i++){
+        for (int i=1;i<=plateau_property.numberOfCases-1;i++){
             //Load Case intel
             if("Case n°" + i != name){
                 Actual_property = GameObject.Find("/Case n°" + i).GetComponent<Case_script>();
@@ -81,7 +84,7 @@ public class Case_script : MonoBehaviour
                 /* si la case esst adjacente et que son occupation est libre, ça compte pour une case libre*/
                 if( Vector3.Distance(Actual_property.Position,Position)<=1.8 
                     && Vector3.Distance(Actual_property.Position,Position)>0
-                    && Actual_property.Occupation == "free")
+                    && Actual_property.Occupation == OccupationType.Free)
                 {
                     Cases_libres_voisines.Add(Actual_property.name);
                  }
@@ -97,7 +100,7 @@ public class Case_script : MonoBehaviour
 
         // Verif position toutes les cases
 
-        for (int i=1;i<=plateau_property.id-1;i++){
+        for (int i=1;i<=plateau_property.numberOfCases-1;i++){
             //Load Case intel
             if("Case n°" + i != name){
                 Actual_property = GameObject.Find("/Case n°" + i).GetComponent<Case_script>();
@@ -115,12 +118,17 @@ public class Case_script : MonoBehaviour
         } 
     }
     
+    public void AddNeighbour(Case_script CaseToAdd)
+    {
+        Cases_voisines.Add(CaseToAdd);
+    }
+
     public void Create_Building(
         string input_name,int input_health,
-        string input_type, string input_effect,string input_Owner)
+        string input_type, string input_effect,int input_Owner)
 
     { 
-        Find_Batiments_Adjacents();
+        HasCaseAnAdjacentBuilding();
         Find_Ennemies_Adjacentes () ;
         //Créer un Building si pas de building adjacent et pas d'unités ennemies adjacentes.
         if(Cases_batiment_voisines.Count== 0 && Cases_ennemies_voisines.Count==0)
@@ -139,7 +147,7 @@ public class Case_script : MonoBehaviour
 
             Owning_control = input_Owner;
             Supply = true;
-            Occupation = "Building";
+            Occupation = OccupationType.Building;
         }
         else 
         {
@@ -175,7 +183,7 @@ public class Case_script : MonoBehaviour
         //Phase 2 Step Move B
         if (UI_values.Phase_number ==2 && UI_values.Step == "Move B")
         {
-            if(Occupation=="free") //Case must be free
+            if(Occupation==OccupationType.Free) //Case must be free
             {
                 //Link to Move_display
                 GameObject HUD2= GameObject.Find("Phase II");
@@ -198,4 +206,28 @@ public class Case_script : MonoBehaviour
             }
         }
     }
+
+
+    /*int AddTokenToCase(Unit_script token)
+    {
+        OccupingUnit = token;
+        return;
+    }
+    Player_script getOwningControl()
+    {
+        if (OccupingUnit != null)
+        {
+
+        }
+        if (OccupingBuilding != null)
+        {
+
+        }
+
+            //Token présent?
+            //Si non => Free
+            //Si oui:
+                //Renvoyer Joueur à qui ca appartient
+
+    }*/
 }

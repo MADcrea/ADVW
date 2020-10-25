@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4993479029648170322}
   - component: {fileID: 5814117727825440788}
   - component: {fileID: 9190144935590270606}
+  - component: {fileID: 6233305942131639342}
   m_Layer: 0
   m_Name: Case
   m_TagString: Untagged
@@ -93,3 +94,31 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6233305942131639342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4966053963667417896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e6c2e2ed767df0459b68e0a1af240dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Position: {x: 0, y: 0, z: 0}
+  Terrain: {fileID: 0}
+  Owning_control: 0
+  OccupingUnit: {fileID: 0}
+  OccupingBuilding: {fileID: 0}
+  id: 0
+  Occupation: 0
+  Supply: 0
+  voisin_index: 0
+  Cases_libres_voisines: []
+  Cases_batiment_voisines: []
+  Cases_ennemies_voisines: []
+  BatimentPrefab: {fileID: 0}
+  Board: {fileID: 0}
+  Actual_property: {fileID: 0}
+  UI_case_Prefab: {fileID: 0}

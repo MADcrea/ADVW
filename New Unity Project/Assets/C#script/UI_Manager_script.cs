@@ -5,7 +5,13 @@ using UnityEngine;
 public class UI_Manager_script : MonoBehaviour
 {
     public int Phase_number;
-    public string Step;
+    public StepType Step;
+
+    public enum StepType
+    {
+        Intel,
+        //...
+    }
     public string Player_turn;
     // Start is called before the first frame update
     void Start()

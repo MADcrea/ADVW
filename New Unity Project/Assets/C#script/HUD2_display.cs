@@ -188,7 +188,7 @@ public class HUD2_display : MonoBehaviour
         Case_script destination_values = destination.GetComponent<Case_script>();
 
         Voyager.transform.position =destination.transform.position + new Vector3(0,0.2f,0);
-        destination_values.Occupation ="Unit";
+        destination_values.Occupation =Case_script.OccupationType.Unit;
         destination_values.Owning_control =Voyager_values.Owner;
         Voyager_values.Change_Mvt_stock(-1f);
         

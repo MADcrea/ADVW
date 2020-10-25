@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class Unit_script : MonoBehaviour
 {
-public string type;
+
+public enum UnitType
+{
+    Rifle,
+    Bazooka,
+    Jeep,
+    Tank, 
+    Artillery
+}
+public UnitType type;
 public float health;
 public float H_limit;
 public float mvt;
@@ -16,7 +25,7 @@ public float reload;
 public float R_limit;
 public float aim;
 public float Aim_limit;
-public string Owner;
+public int Owner;
 public bool activated;
 public Vector3 Position;
 public string Case;
@@ -26,7 +35,7 @@ public string Case;
     {
        activated = false;
        health =1;
-       type = "rifle";
+       type = UnitType.Rifle;
        Set_up_unit_values();
        Recolte();
     }
@@ -39,43 +48,43 @@ public string Case;
     //Set up is called after unit instantiation
     public void Set_up_unit_values()
     {
-        if(type=="rifle")
+        switch (type)
+        {
+            case UnitType.Rifle:
+                H_limit = 1;
+                M_limit =1;
+                A_limit = 1;
+                activated =true;
+                spawn =0;
+                R_limit = 1;
+                Aim_limit =1;
+                break;
+           case UnitType.Bazooka:
+                H_limit=1;
+                M_limit=1;
+                A_limit=2;
+                spawn=1;
+                R_limit=1;
+                Aim_limit =1;
+                break;
+       if(type==UnitType.Jeep)
        {
-        H_limit = 1;
-        M_limit =1;
-        A_limit = 1;
-        activated =true;
-        spawn =0;
-        R_limit = 1;
-        Aim_limit =1;
+            H_limit=1;
+            M_limit =4;
+            A_limit=2;
+            spawn=1;
+            R_limit=1;
+            Aim_limit=1;
        }
-       if(type=="bazooka")
+       if(type==UnitType.Tank)
        {
-           H_limit=1;
-           M_limit=1;
-           A_limit=2;
-           spawn=1;
-           R_limit=1;
-           Aim_limit =1;
-       }
-       if(type=="jeep")
-       {
-           H_limit=1;
-           M_limit =4;
-           A_limit=2;
-           spawn=1;
-           R_limit=1;
-           Aim_limit=1;
-       }
-       if(type=="char")
-       {
-           H_limit=2;
-           M_limit=3;
-           A_limit=3;
-           spawn=2;
-           R_limit=1;
-           Aim_limit=1;
-        if(type=="mortier")
+            H_limit=2;
+            M_limit=3;
+            A_limit=3;
+            spawn=2;
+            R_limit=1;
+            Aim_limit=1;
+        if(type==UnitType.Artillery)
         {
             H_limit=1;
             M_limit=2;
@@ -94,6 +103,7 @@ public string Case;
         mvt =M_limit;
         ammo=A_limit;
     }
+
     public void Change_time_before_activation()
     {
         if(spawn !=0)
@@ -110,6 +120,7 @@ public string Case;
             aim=Aim_limit;
         }
     }
+
     public void Change_Health_stock(float Health_change)
     {
         if(health +Health_change <H_limit)
@@ -123,20 +134,22 @@ public string Case;
             Debug.Log(name + " from owner " + Owner +" has been killed");
         }
     }
+
     public void Change_Ammo_stock(float Ammo_change)
     {
         if(ammo+Ammo_change< A_limit)
         {
-        ammo=ammo+Ammo_change;
+            ammo=ammo+Ammo_change;
         }
     }
     public void Change_Mvt_stock(float Mvt_change)
     {
         if(mvt+Mvt_change<M_limit)
         {
-        mvt=mvt+Mvt_change;
+            mvt=mvt+Mvt_change;
         }
     }
+    
     private void OnMouseUp() 
     {
         //Link to UI_Manager
