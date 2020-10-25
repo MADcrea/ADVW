@@ -33,10 +33,7 @@ public class Case_script : MonoBehaviour
         BatimentPrefab =Resources.Load<GameObject>("fixe/Batiment");
         Cases_libres_voisines.Clear();
         Cases_batiment_voisines.Clear();
-        Cases_ennemies_voisines.Clear();
-
-
-        
+        Cases_ennemies_voisines.Clear();        
      }
     // Update is called once per frame
     void Update()
@@ -154,6 +151,13 @@ public class Case_script : MonoBehaviour
          //Link to UI_Manager
         GameObject UI_Man = GameObject.Find("UI_Manager");
         UI_Manager_script UI_values = UI_Man.GetComponent<UI_Manager_script>();
+
+        //Phase 1 Step Case selection for unit
+        if (UI_values.Phase_number ==1 && UI_values.Step == "Case selection for unit")
+        {
+            //Check if case is free
+            //Check if valid building is near
+        }
 
         //Phase 2 Step Intel
         if (UI_values.Phase_number ==2 && UI_values.Step == "Intel")
