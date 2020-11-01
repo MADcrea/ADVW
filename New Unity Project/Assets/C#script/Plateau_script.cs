@@ -7,13 +7,12 @@ public class Plateau_script : MonoBehaviour
 {
     
     public const int NUMBER_PLAYER_MAX = 4;
-
-    public const int NUMBER_OF_PLAYERS = 2;
     public GameObject CasePrefab;
     public int Board_size;
     public float décalage_x;
     public int numberOfCases;
     public string Terrain;
+    public GameObject UI_Man;
     Material CaseObjectMaterial ;
 
     const float CASE_WIDTH = 1.7f;
@@ -27,7 +26,9 @@ public class Plateau_script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (SetBoardSize(NUMBER_OF_PLAYERS) == false)
+        UI_Manager_script UI_values = UI_Man.GetComponent<UI_Manager_script>();
+
+        if (SetBoardSize(UI_values.NUMBER_OF_PLAYERS) == false)
         {
             Debug.Log("Board Initilization failed");
             return;

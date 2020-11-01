@@ -22,7 +22,6 @@ public class Case_script : MonoBehaviour
     public int id;
     public OccupationType Occupation;
 
-
     public bool Supply;
     public int voisin_index;
 
@@ -43,12 +42,13 @@ public class Case_script : MonoBehaviour
     {
         Owning_control =-1;
         Supply =false;
-        Occupation=OccupationType.Free;
-        BatimentPrefab =Resources.Load<GameObject>("fixe/Batiment");
-        Cases_libres_voisines.Clear();
-        Cases_batiment_voisines.Clear();
-        Cases_ennemies_voisines.Clear();
+        Occupation=OccupationType.Free;       
      }
+    public void AddNeighbour(Case_script CaseToAdd)
+    {
+        Cases_voisines.Add(CaseToAdd);
+    }
+    
     // Update is called once per frame
     void Update()
     {        
@@ -66,70 +66,39 @@ public class Case_script : MonoBehaviour
         }
         return returnValue;
     }
-    
-    public void Find_Free_Adjacentes()
+    bool HasCaseAnAdjacentEnemyUnit()
     {
-        Cases_libres_voisines.Clear();
-        //Load Plateau intel
-        Board = GameObject.Find("Plateau");
-        Plateau_script plateau_property = Board.GetComponent<Plateau_script>();
-
-        // Verif position toutes les cases
-
-        for (int i=1;i<=plateau_property.numberOfCases-1;i++){
-            //Load Case intel
-            if("Case n°" + i != name){
-                Actual_property = GameObject.Find("/Case n°" + i).GetComponent<Case_script>();
-                
-                /* si la case esst adjacente et que son occupation est libre, ça compte pour une case libre*/
-                if( Vector3.Distance(Actual_property.Position,Position)<=1.8 
-                    && Vector3.Distance(Actual_property.Position,Position)>0
-                    && Actual_property.Occupation == OccupationType.Free)
-                {
-                    Cases_libres_voisines.Add(Actual_property.name);
-                 }
+        bool returnValue = false;
+        foreach(Case_script CaseVoisine in Cases_voisines)
+        {
+            if (CaseVoisine.Occupation == OccupationType.Unit 
+                && CaseVoisine.Owning_control != Owning_control)
+            {
+                returnValue = true;
             }
-        } 
-    }
-    public void Find_Ennemies_Adjacentes()
+        }
+        return returnValue;
+    } 
+    bool HasCaseAnAdjacentAllyUnit()
     {
-        Cases_ennemies_voisines.Clear();
-        //Load Plateau intel
-        Board = GameObject.Find("Plateau");
-        Plateau_script plateau_property = Board.GetComponent<Plateau_script>();
-
-        // Verif position toutes les cases
-
-        for (int i=1;i<=plateau_property.numberOfCases-1;i++){
-            //Load Case intel
-            if("Case n°" + i != name){
-                Actual_property = GameObject.Find("/Case n°" + i).GetComponent<Case_script>();
-
-                /*Si case adjacente et le controle de celle-ci est différent de la case regardée,
-                 ça compte pour une présence ennemie (batiment ou unités) */
-
-                if( Vector3.Distance(Actual_property.Position,Position)<=1.8 
-                    && Vector3.Distance(Actual_property.Position,Position)>0
-                    && Owning_control!=Actual_property.Owning_control)
-                {
-                    Cases_ennemies_voisines.Add(Actual_property.name);
-                 }
+        bool returnValue = false;
+        foreach(Case_script CaseVoisine in Cases_voisines)
+        {
+            if (CaseVoisine.Occupation == OccupationType.Unit 
+                && CaseVoisine.Owning_control == Owning_control)
+            {
+                returnValue = true;
             }
-        } 
+        }
+        return returnValue; 
     }
     
-    public void AddNeighbour(Case_script CaseToAdd)
-    {
-        Cases_voisines.Add(CaseToAdd);
-    }
-
     public void Create_Building(
         string input_name,int input_health,
         string input_type, string input_effect,int input_Owner)
 
     { 
         HasCaseAnAdjacentBuilding();
-        Find_Ennemies_Adjacentes () ;
         //Créer un Building si pas de building adjacent et pas d'unités ennemies adjacentes.
         if(Cases_batiment_voisines.Count== 0 && Cases_ennemies_voisines.Count==0)
         {
@@ -161,14 +130,14 @@ public class Case_script : MonoBehaviour
         UI_Manager_script UI_values = UI_Man.GetComponent<UI_Manager_script>();
 
         //Phase 1 Step Case selection for unit
-        if (UI_values.Phase_number ==1 && UI_values.Step == "Case selection for unit")
+        if (UI_values.Phase_number ==1 && UI_values.Step ==UI_Manager_script.StepType.Token_creation_case)
         {
             //Check if case is free
             //Check if valid building is near
         }
 
         //Phase 2 Step Intel
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Intel")
+        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Intel)
         {
             //Link to intel_display
             GameObject HUD2= GameObject.Find("Phase II");
@@ -177,23 +146,23 @@ public class Case_script : MonoBehaviour
             Terrain.name + "\n"+ "\r"+
             "Owned by : " +Owning_control +"\n"+ "\r"+
             Occupation +" of use";
-            HUD.Intel_UI_update(Terrain.name,description,name);
+            HUD.Intel_UI_update(Terrain.name,description,this.gameObject);
         }
         
         //Phase 2 Step Move B
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Move B")
+        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Move_B)
         {
             if(Occupation==OccupationType.Free) //Case must be free
             {
                 //Link to Move_display
                 GameObject HUD2= GameObject.Find("Phase II");
                 HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-                GameObject Voyager=GameObject.Find(HUD.ElementA);
+                GameObject Voyager=HUD.ElementA;
                 if (Vector3.Distance(Voyager.transform.position, transform.position)< 1.8f) //Case must be adjacente
                 {
                     string description =name + "\n"+"\r"+
                     Terrain.name + "\n"+ "\r";
-                    HUD.Move_B_UI_update(Terrain.name,description,name);
+                    HUD.Move_B_UI_update(Terrain.name,description,this.gameObject);
                 }
                 else
                 {

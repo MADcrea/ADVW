@@ -54,7 +54,7 @@ public class Batiment_script : MonoBehaviour
         UI_Manager_script UI_values = UI_Man.GetComponent<UI_Manager_script>();
 
         //Phase 2 Step Intel
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Intel")
+        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Intel)
         {
             //Link to intel_display
             GameObject HUD2= GameObject.Find("Phase II");
@@ -64,13 +64,13 @@ public class Batiment_script : MonoBehaviour
             Owner               +"\n"+"\r"+ //Owner
             Effect ;
 
-            HUD.Intel_UI_update("none",description,name);
+            HUD.Intel_UI_update("none",description,this.gameObject);
         }
 
         //Phase 2 Step Attack A
         // Owner Must be verified
         // Attack type must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Attack A")
+        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Attack_A)
         {
             //Link to intel_display
             GameObject HUD2= GameObject.Find("Phase II");
@@ -81,13 +81,13 @@ public class Batiment_script : MonoBehaviour
             health              +"\n"+"\r"+ //health
             Effect ;
 
-            HUD.Attack_A_UI_update("none",description,name);
+            HUD.Attack_A_UI_update("none",description,this.gameObject);
         }
 
         //Phase 2 Step Attack B
         //Owner must be verified
         //NOT a CITY must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Attack B")
+        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Attack_B)
         {
             //Link to intel_display
             GameObject HUD2= GameObject.Find("Phase II");
@@ -99,12 +99,12 @@ public class Batiment_script : MonoBehaviour
             health              +"\n"+"\r"+ //health
             Effect ;
 
-            HUD.Attack_B_UI_update("none",description,name);
+            HUD.Attack_B_UI_update("none",description,this.gameObject);
         }
 
         //Phase 2 Step Self-Destruct
         //Owner must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == "SD")
+        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.SD_A)
         {
             //Link to intel_display
             GameObject HUD2= GameObject.Find("Phase II");
@@ -116,7 +116,7 @@ public class Batiment_script : MonoBehaviour
             health              +"\n"+"\r"+ //health
             Effect ;
 
-            HUD.SD_UI_update("none",description,name);
+            HUD.SD_UI_update("none",description,this.gameObject);
         }
     }
 }

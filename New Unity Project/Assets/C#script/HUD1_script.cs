@@ -47,28 +47,28 @@ public class HUD1_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(UI_values.Player_turn == "P1")
+        if(UI_values.Player_turn == 1)
         {
             S_P.text=Values_P1.Steel_prod.ToString(); S_S.text = Values_P1.Steel_stock.ToString();
             E_P.text=Values_P1.Energy_prod.ToString(); E_S.text=Values_P1.Energy_stock.ToString();
             M_P.text=Values_P1.Brick_prod.ToString(); M_S.text=Values_P1.Brick_stock.ToString();
             D_P.text=Values_P1.Money_prod.ToString(); D_S.text=Values_P1.Money_stock.ToString();
         }
-        if(UI_values.Player_turn == "P2")
+        if(UI_values.Player_turn == 2)
         {
             S_P.text=Values_P2.Steel_prod.ToString(); S_S.text = Values_P2.Steel_stock.ToString();
             E_P.text=Values_P2.Energy_prod.ToString(); E_S.text=Values_P2.Energy_stock.ToString();
             M_P.text=Values_P2.Brick_prod.ToString(); M_S.text=Values_P2.Brick_stock.ToString();
             D_P.text=Values_P2.Money_prod.ToString(); D_S.text=Values_P2.Money_stock.ToString();
         }
-        if(UI_values.Player_turn == "P3")
+        if(UI_values.Player_turn == 3)
         {
             S_P.text=Values_P3.Steel_prod.ToString(); S_S.text = Values_P3.Steel_stock.ToString();
             E_P.text=Values_P3.Energy_prod.ToString(); E_S.text=Values_P3.Energy_stock.ToString();
             M_P.text=Values_P3.Brick_prod.ToString(); M_S.text=Values_P3.Brick_stock.ToString();
             D_P.text=Values_P3.Money_prod.ToString(); D_S.text=Values_P3.Money_stock.ToString();
         }
-        if(UI_values.Player_turn == "P4")
+        if(UI_values.Player_turn == 4)
         {
             S_P.text=Values_P4.Steel_prod.ToString(); S_S.text = Values_P4.Steel_stock.ToString();
             E_P.text=Values_P4.Energy_prod.ToString(); E_S.text=Values_P4.Energy_stock.ToString();
@@ -94,7 +94,7 @@ public class HUD1_script : MonoBehaviour
         {
             //=>Update information message
             Intel.text="Rifle can be created, where do you want it to be deployed?";
-            UI_values.Step = "Case selection for unit";
+            UI_values.Step = UI_Manager_script.StepType.Token_creation_case;
         }
         else
         {

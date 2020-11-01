@@ -14,30 +14,32 @@ public enum UnitType
     Artillery
 }
 public UnitType type;
-public float health;
-public float H_limit;
-public float mvt;
-public float M_limit;
-public float ammo;
-public float A_limit;
-public float spawn;
-public float reload;
-public float R_limit;
-public float aim;
-public float Aim_limit;
+public float health; public float H_limit;
+public float mvt; public float M_limit;
+public float ammo; public float A_limit;
+public float spawn; 
+public float reload; public float R_limit; 
+public float aim; public float Aim_limit;
 public int Owner;
 public bool activated;
 public Vector3 Position;
-public string Case;
+public GameObject UI_Man; UI_Manager_script UI_values;
+//Link to intel_display
+public GameObject HUD2GO; HUD2_display HUD2Value;
 
     // Start is called before the first frame update
     void Start()
     {
-       activated = false;
-       health =1;
-       type = UnitType.Rifle;
-       Set_up_unit_values();
-       Recolte();
+        activated = false;
+        health =1;
+        type = UnitType.Rifle;
+        Set_up_unit_values();
+        Recolte();
+        //Link to UI_Manager
+        UI_Man = GameObject.Find("UI_Manager");
+        UI_values = UI_Man.GetComponent<UI_Manager_script>();
+        HUD2GO =GameObject.Find("Phase II");
+        HUD2Value = HUD2GO.GetComponent<HUD2_display>();
     }
 
     // Update is called once per frame
@@ -59,7 +61,7 @@ public string Case;
                 R_limit = 1;
                 Aim_limit =1;
                 break;
-           case UnitType.Bazooka:
+            case UnitType.Bazooka:
                 H_limit=1;
                 M_limit=1;
                 A_limit=2;
@@ -67,34 +69,31 @@ public string Case;
                 R_limit=1;
                 Aim_limit =1;
                 break;
-       if(type==UnitType.Jeep)
-       {
-            H_limit=1;
-            M_limit =4;
-            A_limit=2;
-            spawn=1;
-            R_limit=1;
-            Aim_limit=1;
-       }
-       if(type==UnitType.Tank)
-       {
-            H_limit=2;
-            M_limit=3;
-            A_limit=3;
-            spawn=2;
-            R_limit=1;
-            Aim_limit=1;
-        if(type==UnitType.Artillery)
-        {
-            H_limit=1;
-            M_limit=2;
-            A_limit=3;
-            spawn=2;
-            R_limit=1;
-            Aim_limit=2;
+            case UnitType.Jeep:
+                H_limit=1;
+                M_limit =4;
+                A_limit=2;
+                spawn=1;
+                R_limit=1;
+                Aim_limit=1;
+                break;
+            case UnitType.Tank:
+                H_limit=2;
+                M_limit=3;
+                A_limit=3;
+                spawn=2;
+                R_limit=1;
+                Aim_limit=1;
+                break;
+            case UnitType.Artillery:
+                H_limit=1;
+                M_limit=2;
+                A_limit=3;
+                spawn=2;
+                R_limit=1;
+                Aim_limit=2;
+                break;
         }
-
-       }
     }
     //Recolte is called in phase 3 or at building unit
     public void Recolte()
@@ -152,16 +151,9 @@ public string Case;
     
     private void OnMouseUp() 
     {
-        //Link to UI_Manager
-        GameObject UI_Man = GameObject.Find("UI_Manager");
-        UI_Manager_script UI_values = UI_Man.GetComponent<UI_Manager_script>();
-
         //Phase 2 Step Intel
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Intel")
+        if (UI_values.Step == UI_Manager_script.StepType.Intel)
         {
-            //Link to intel_display
-            GameObject HUD2= GameObject.Find("Phase II");
-            HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
             string description = 
             type                +"\n"+"\r"+ //type
             Owner               +"\n"+"\r"+ //Owner
@@ -169,19 +161,16 @@ public string Case;
             mvt +"/"+M_limit    +"\n"+"\r"+ //Move
             ammo +"/"+A_limit             ; //Ammo
 
-            HUD.Intel_UI_update("none",description,name);
+            HUD2Value.Intel_UI_update("none",description,this.gameObject);
         }
 
         //Phase 2 Step Attack A
         // Owner Must be verified
         
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Attack A")
+        if (UI_values.Step == UI_Manager_script.StepType.Attack_A)
         {
             if(ammo>0)// Ammo stock must be verified
             {
-                //Link to intel_display
-                GameObject HUD2= GameObject.Find("Phase II");
-                HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
                 string description =
                 type                +"\n"+"\r"+ //type
                 Owner               +"\n"+"\r"+ //Owner
@@ -189,7 +178,7 @@ public string Case;
                 mvt +"/"+M_limit    +"\n"+"\r"+ //Move
                 ammo +"/"+A_limit             ; //Ammo
 
-                HUD.Attack_A_UI_update("none",description,name);
+                HUD2Value.Attack_A_UI_update("none",description,this.gameObject);
             }
             else
             {
@@ -198,12 +187,10 @@ public string Case;
         }
 
         //Phase 2 Step Attack B
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Attack B")
+        if (UI_values.Step == UI_Manager_script.StepType.Attack_B)
         {
         //Link to intel_display
-        GameObject HUD2= GameObject.Find("Phase II");
-        HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-        GameObject Attacker = GameObject.Find(HUD.ElementA);
+        GameObject Attacker = HUD2Value.ElementA;
         Unit_script Attacker_values = Attacker.GetComponent<Unit_script>();
 
             if(Attacker_values.name!=name && Attacker_values.Owner!=Owner) //Owner must be different
@@ -218,7 +205,7 @@ public string Case;
                     mvt +"/"+M_limit    +"\n"+"\r"+ //Move
                     ammo +"/"+A_limit             ; //Ammo
 
-                    HUD.Attack_B_UI_update("none",description,name);
+                    HUD2Value.Attack_B_UI_update("none",description,this.gameObject);
                 }
                 else
                 {
@@ -229,13 +216,11 @@ public string Case;
 
         //Phase 2 Step Move A
         // Owner Must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == "Move A")
+        if (UI_values.Step == UI_Manager_script.StepType.Move_A)
         {
             if(mvt>0f)//Mvt must be verified
             {
                 //Link to intel_display
-                GameObject HUD2= GameObject.Find("Phase II");
-                HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
                 string description =
                 type                +"\n"+"\r"+ //type
                 Owner               +"\n"+"\r"+ //Owner
@@ -243,7 +228,7 @@ public string Case;
                 mvt +"/"+M_limit    +"\n"+"\r"+ //Move
                 ammo +"/"+A_limit             ; //Ammo
 
-                HUD.Move_A_UI_update("none",description,name);
+                HUD2Value.Move_A_UI_update("none",description,this.gameObject);
             }
             else
             {
@@ -253,11 +238,9 @@ public string Case;
         
         //Phase 2 Step Self-Destruct
         //Owner must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == "SD")
+        if (UI_values.Step ==UI_Manager_script.StepType.SD_A)
         {
             //Link to intel_display
-            GameObject HUD2= GameObject.Find("Phase II");
-            HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
             string description =
             type                +"\n"+"\r"+ //type
             "Chance : " + "87%"    +"\n"+"\r"+ // Proba fixe de 87% (ne pas faire 1 sur un dé à 6 faces)
@@ -266,7 +249,7 @@ public string Case;
             mvt +"/"+M_limit    +"\n"+"\r"+ //Move
             ammo +"/"+A_limit             ; //Ammo
 
-            HUD.SD_UI_update("none",description,name);
+            HUD2Value.SD_UI_update("none",description,this.gameObject);
         }
     }    
 }
