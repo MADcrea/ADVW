@@ -432,6 +432,7 @@ MonoBehaviour:
   Owner: 0
   activated: 0
   Position: {x: 0, y: 0, z: 0}
+  Occupied_case: {fileID: 0}
   UI_Man: {fileID: 0}
   HUD2GO: {fileID: 0}
 --- !u!1 &69437018
@@ -2542,6 +2543,7 @@ MonoBehaviour:
   Owner: 0
   activated: 0
   Position: {x: 0, y: 0, z: 0}
+  Occupied_case: {fileID: 0}
   UI_Man: {fileID: 0}
   HUD2GO: {fileID: 0}
 --- !u!1 &602802222
@@ -3470,8 +3472,34 @@ MonoBehaviour:
   Player_text: {fileID: 1341864472}
   PH2_Attack: {fileID: 481257559}
   Attack_UI: {fileID: 0}
+  Attacker_icon: {fileID: 1323785366}
+  Attacker_HV: {fileID: 1531004792}
+  Attacker_HL: {fileID: 1461350676}
+  Attacker_AV: {fileID: 1983658634}
+  Attacker_AL: {fileID: 1802627692}
+  Attacker_MV: {fileID: 759347304}
+  Attacker_ML: {fileID: 902978228}
+  Attacker_Player: {fileID: 240137653}
+  Attacked_icon: {fileID: 213284316}
+  Attacked_HV: {fileID: 1545493427}
+  Attacked_HL: {fileID: 671671592}
+  Attacked_AV: {fileID: 865016653}
+  Attacked_AL: {fileID: 1485018800}
+  Attacked_MV: {fileID: 866605619}
+  Attacked_ML: {fileID: 1368322041}
+  Attacked_Player: {fileID: 1520937531}
   PH2_Move: {fileID: 69437018}
   Move_UI: {fileID: 0}
+  Voyager_icon: {fileID: 539146949}
+  Voyager_HV: {fileID: 126218643}
+  Voyager_HL: {fileID: 2088662901}
+  Voyager_AV: {fileID: 347236672}
+  Voyager_AL: {fileID: 1110749872}
+  Voyager_MV: {fileID: 396543363}
+  Voyager_ML: {fileID: 935853690}
+  Voyager_Player: {fileID: 1674388366}
+  destination_icon: {fileID: 1214517790}
+  destination_text: {fileID: 1996305539}
   PH2_SD: {fileID: 757369228}
   SD_UI: {fileID: 0}
   ElementA: {fileID: 0}

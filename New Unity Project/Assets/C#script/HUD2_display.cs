@@ -7,14 +7,28 @@ using TMPro;
 public class HUD2_display : MonoBehaviour
 {
     public GameObject UI_Man;       public UI_Manager_script UI_values;
+    //Intel reference
     public GameObject PH2_Intel;    public CanvasGroup Intel_UI;
     public Image Image_icon; public Text TYPE_text; public Text HV_text; public Text HL_text;
     public Text AV_text; public Text AL_text; public Text MV_text; public Text ML_text; public Text Player_text;
+    //Attack reference
     public GameObject PH2_Attack;   public CanvasGroup Attack_UI;
+    public Image Attacker_icon; public Text Attacker_HV; public Text Attacker_HL; 
+    public Text Attacker_AV; public Text Attacker_AL; public Text Attacker_MV;
+    public Text Attacker_ML; public Text Attacker_Player;
+    public Image Attacked_icon; public Text Attacked_HV; public Text Attacked_HL;
+    public Text Attacked_AV; public Text Attacked_AL; public Text Attacked_MV; 
+    public Text Attacked_ML; public Text Attacked_Player;
+    //Move reference
     public GameObject PH2_Move;     public CanvasGroup Move_UI;
+    public Image Voyager_icon; public Text Voyager_HV; public Text Voyager_HL; public Text Voyager_AV;
+    public Text Voyager_AL; public Text Voyager_MV; public Text Voyager_ML; public Text Voyager_Player;
+     public Image destination_icon; public Text destination_text;
+     //Self-destruct reference
     public GameObject PH2_SD;       public CanvasGroup SD_UI;
-    public GameObject ElementA;
-    public GameObject ElementB;
+
+    //Perform reference
+    public GameObject ElementA;    public GameObject ElementB;
 
     // Start is called before the first frame update
     void Start()
@@ -89,6 +103,15 @@ public class HUD2_display : MonoBehaviour
     public void Attack_cancel (int a)
     {
         //Mise en blanc de tous les champs
+        Attacker_icon.material= Resources.Load<Material>("Textures/UI_Blank");
+        Attacker_HV.text = "";
+        Attacker_HL.text = "";
+        Attacker_AV.text = "";
+        Attacker_AL.text = "";
+        Attacker_MV.text = "";
+        Attacker_ML.text = "";
+        Attacker_Player.text = "";
+
 
         //Fermeture UI_Attack
         HideShowHUD(Attack_UI);
@@ -107,39 +130,49 @@ public class HUD2_display : MonoBehaviour
 
             GameObject Attacker =ElementA;
             GameObject Attacked =ElementB;
-
-            if( ElementA.GetComponent("Unit_script") as Unit_script!=null)
+            //Attacker loses 1 ammo
+            switch(WhatKindOfObjectIsThisOne(ElementA))
             {
-                Unit_script Attacker_values = Attacker.GetComponent<Unit_script>();
-                //Ammo stock reduction
-                Attacker_values.Change_Ammo_stock(-1f);
+                case 0: 
+                    Debug.Log("ElementA Type cannot be defined");
+                    break;
+                case 1:
+                    Unit_script UnitValues = ElementA.GetComponent<Unit_script>();
+                    //Call function reducing ammo
+                    UnitValues.Change_Ammo_stock(-1f);
+                    break;
+                case 2:
+                    Batiment_script BuildingValues = ElementA.GetComponent<Batiment_script>();
+                    //Call function reducing ammo
+                    BuildingValues.Change_Ammo_stock(-1f);
+                    break;
+                case 3:
+                Debug.Log("Case cannot attack / No function available");
+                break;
             }
-            else
-            {         
-                Batiment_script Attacker_values = Attacker.GetComponent<Batiment_script>();
-                //Ammo stock reduction
-                Attacker_values.Change_Ammo_stock(-1f);
-            }
-        
-            if(ElementB.GetComponent("Unit_script")!=null)
-            {    
-                Unit_script Attacked_values = Attacked.GetComponent<Unit_script>();
-                //Success? => loose health
-                if(random_value >= success_value)
+            //Attacked might loses 1 health
+            if(random_value>=success_value)
+            {
+                switch(WhatKindOfObjectIsThisOne(ElementB))
                 {
-                    Attacked_values.Change_Health_stock(-1f);
+                    case 0: 
+                        Debug.Log("Object Type cannot be defined");
+                        break;
+                    case 1:
+                        Unit_script UnitValues = ElementB.GetComponent<Unit_script>();
+                        //Call function reducing ammo
+                        UnitValues.Change_Health_stock(-1f);
+                        break;
+                    case 2:
+                        Batiment_script BuildingValues = ElementA.GetComponent<Batiment_script>();
+                        //Call function reducing ammo
+                        BuildingValues.Change_Health_stock(-1f);
+                        break;
+                    case 3:
+                    Debug.Log("Case cannot be attacked / No function available");
+                    break;
                 }
             }
-            else
-            {
-                Batiment_script Attacked_values = Attacked.GetComponent<Batiment_script>();
-                //Success? => loose health
-                if(random_value >= success_value)
-                {
-                    Attacked_values.Change_Health_stock(-1f);
-                }
-            }
-        
             Attack_cancel(1);
         }
     }
@@ -158,6 +191,16 @@ public class HUD2_display : MonoBehaviour
     public void Move_Cancel (int a)
     {
         // Mise en blanc de tous les champs
+        Voyager_icon.material = Resources.Load<Material>("Textures/UI_Blank");
+        Voyager_HV.text = "";
+        Voyager_HL.text = "";
+        Voyager_AV.text = "";
+        Voyager_AL.text = "";
+        Voyager_MV.text = "";
+        Voyager_ML.text = "";
+        Voyager_Player.text = "";
+        destination_icon.material = Resources.Load<Material>("Textures/UI_Blank");
+        destination_text.text = "";
         
         //Fermeture UI_Move
         HideShowHUD(Move_UI);
@@ -170,12 +213,19 @@ public class HUD2_display : MonoBehaviour
     {
         GameObject Voyager =ElementA;
         Unit_script Voyager_values = Voyager.GetComponent<Unit_script>();
-        GameObject destination =ElementB;
+        Case_script Origin_Case = Voyager_values.Occupied_case.GetComponent<Case_script>();
+        GameObject destination = ElementB;
         Case_script destination_values = destination.GetComponent<Case_script>();
 
-        Voyager.transform.position =destination.transform.position + new Vector3(0,0.2f,0);
+        //Remplace l'occupation de la case occupée avant le mouvement par l'unité
+        Origin_Case.Occupation = Case_script.OccupationType.Free;
+        //Le token unité bouge à son nouvel emplacement
+        Voyager.transform.position = destination.transform.position + new Vector3(0,0.2f,0);
+        Voyager_values.Occupied_case = destination_values;
+        //La case destination est occupée
         destination_values.Occupation =Case_script.OccupationType.Unit;
         destination_values.Owning_control =Voyager_values.Owner;
+        //L'unité perd un mouvement
         Voyager_values.Change_Mvt_stock(-1f);
         
         Move_Cancel(1);
@@ -303,38 +353,113 @@ public class HUD2_display : MonoBehaviour
                 AL_text.text = "N/A";
                 MV_text.text = "N/A";
                 ML_text.text = "N/A";
-                Player_text.text= CaseValues.Occupation.ToString();
+                Player_text.text=CaseValues.Occupation.ToString();
                 break;
         }
     }
-    public void Attack_A_UI_update (string icon, string description,GameObject Object)
+    public void Attack_A_UI_update (GameObject Object)
     {
-        //Mise à jour des données à afficher
+        //Find object type and display according to
+        switch(WhatKindOfObjectIsThisOne(Object))
+        {
+             case 0:
+                Debug.Log("Object Type cannot be defined");
+                break;
+            case 1:
+                Unit_script UnitValues = Object.GetComponent<Unit_script>();
+                //Display
+                Attacker_icon.material= Resources.Load<Material>("Textures/UI_"+UnitValues.type);
+                Attacker_HV.text = UnitValues.health.ToString();
+                Attacker_HL.text = UnitValues.H_limit.ToString();
+                Attacker_AV.text = UnitValues.ammo.ToString();
+                Attacker_AL.text = UnitValues.A_limit.ToString();
+                Attacker_MV.text = UnitValues.mvt.ToString();
+                Attacker_ML.text = UnitValues.M_limit.ToString();
+                Attacker_Player.text = UnitValues.Owner.ToString();
+                break;
+            case 2:
+                Batiment_script BuildingValues = Object.GetComponent<Batiment_script>();
+                //Display
+                Attacker_icon.material = Resources.Load<Material>("Textures/UI_"+BuildingValues.type);
+                Attacker_HV.text =BuildingValues.health.ToString();
+                Attacker_HL.text =BuildingValues.H_limit.ToString();
+                Attacker_AV.text =BuildingValues.ammo.ToString();
+                Attacker_AL.text =BuildingValues.A_limit.ToString();
+                Attacker_MV.text ="N/A";
+                Attacker_ML.text ="N/A";
+                Attacker_Player.text =BuildingValues.Owner.ToString();
+                break;
+            case 3:
+                Debug.Log("Case cannot attack / No function available");
+                break;
+        }
 
 
         UI_values.Step =UI_Manager_script.StepType.Attack_B;
         ElementA =Object;
     }
-    public void Attack_B_UI_update(string icon, string description,GameObject Object)
+    public void Attack_B_UI_update(GameObject Object)
     {
-        if(ElementA  != Object)
+        if(ElementA  != Object && UI_values.Step == UI_Manager_script.StepType.Attack_B)
         {
-           //Mise à jour des données à afficher
-
-            UI_values.Step =UI_Manager_script.StepType.Attack_C;
-            ElementB =Object;
+            //Find object type and display according to
+            switch(WhatKindOfObjectIsThisOne(Object))
+            {
+                case 0:
+                    Debug.Log("Object Type cannot be defined");
+                    break;
+                case 1:
+                    Unit_script UnitValues = Object.GetComponent<Unit_script>();
+                    //Display
+                    Attacked_icon.material= Resources.Load<Material>("Textures/UI_"+UnitValues.type);
+                    Attacked_HV.text = UnitValues.health.ToString();
+                    Attacked_HL.text = UnitValues.H_limit.ToString();
+                    Attacked_AV.text = UnitValues.ammo.ToString();
+                    Attacked_AL.text = UnitValues.A_limit.ToString();
+                    Attacked_MV.text = UnitValues.mvt.ToString();
+                    Attacked_ML.text = UnitValues.M_limit.ToString();
+                    Attacked_Player.text = UnitValues.Owner.ToString();
+                    break;
+                case 2:
+                    Batiment_script BuildingValues = Object.GetComponent<Batiment_script>();
+                    //Display
+                    Attacked_icon.material = Resources.Load<Material>("Textures/UI_"+BuildingValues.type);
+                    Attacked_HV.text =BuildingValues.health.ToString();
+                    Attacked_HL.text =BuildingValues.H_limit.ToString();
+                    Attacked_AV.text =BuildingValues.ammo.ToString();
+                    Attacked_AL.text =BuildingValues.A_limit.ToString();
+                    Attacked_MV.text ="N/A";
+                    Attacked_ML.text ="N/A";
+                    Attacked_Player.text =BuildingValues.Owner.ToString();
+                    break;
+                case 3:
+                    Debug.Log("Case cannot be attacked / No function available");
+                    break;
+            }
+                UI_values.Step =UI_Manager_script.StepType.Attack_C;
+                ElementB = Object;
         }    
     }
-    public void Move_A_UI_update (string icon, string description,GameObject Object)
+    public void Move_A_UI_update (GameObject Object)
     {
-        //Mise à jour des données à afficher
+        Unit_script UnitValues = Object.GetComponent<Unit_script>();
+        Voyager_icon.material = Resources.Load<Material>("Textures/UI_"+UnitValues.type);
+        Voyager_HV.text = UnitValues.health.ToString();
+        Voyager_HL.text = UnitValues.H_limit.ToString();
+        Voyager_AV.text = UnitValues.ammo.ToString();
+        Voyager_AL.text = UnitValues.A_limit.ToString();
+        Voyager_MV.text = UnitValues.mvt.ToString();
+        Voyager_ML.text = UnitValues.M_limit.ToString();
+        Voyager_Player.text = UnitValues.Owner.ToString();
 
         UI_values.Step = UI_Manager_script.StepType.Move_B;
         ElementA =Object;
     }
-    public void Move_B_UI_update (string icon, string description,GameObject Object)
+    public void Move_B_UI_update (GameObject Object)
     {
-        //Mise à jour des données à afficher
+        Case_script CaseValues = Object.GetComponent<Case_script>();
+        destination_icon.material = Resources.Load<Material>("Textures/UI_"+CaseValues.Terrain.name);
+        destination_text.text = CaseValues.Terrain.name;
 
         UI_values.Step=UI_Manager_script.StepType.Move_C;
         ElementB =Object;

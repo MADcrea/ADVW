@@ -14,22 +14,18 @@ public enum UnitType
     Artillery
 }
 public UnitType type;
-public float health; public float H_limit;
-public float mvt; public float M_limit;
-public float ammo; public float A_limit;
-public float spawn; 
-public float reload; public float R_limit; 
+public float health; public float H_limit; public float mvt; public float M_limit;
+public float ammo; public float A_limit; public float spawn; public float reload; public float R_limit; 
 public float aim; public float Aim_limit;
 public int Owner;
 public bool activated;
-public Vector3 Position;
+public Vector3 Position; public Case_script Occupied_case;
 public GameObject UI_Man; UI_Manager_script UI_values;
-//Link to intel_display
 public GameObject HUD2GO; HUD2_display HUD2Value;
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
         activated = false;
         health =1;
         type = UnitType.Rifle;
@@ -164,14 +160,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         {
             if(ammo>0)// Ammo stock must be verified
             {
-                string description =
-                type                +"\n"+"\r"+ //type
-                Owner               +"\n"+"\r"+ //Owner
-                health +"/"+H_limit +"\n"+"\r"+ //Health
-                mvt +"/"+M_limit    +"\n"+"\r"+ //Move
-                ammo +"/"+A_limit             ; //Ammo
-
-                HUD2Value.Attack_A_UI_update("none",description,this.gameObject);
+                HUD2Value.Attack_A_UI_update(this.gameObject);
             }
             else
             {
@@ -182,23 +171,15 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         //Phase 2 Step Attack B
         if (UI_values.Step == UI_Manager_script.StepType.Attack_B)
         {
-        //Link to intel_display
-        GameObject Attacker = HUD2Value.ElementA;
-        Unit_script Attacker_values = Attacker.GetComponent<Unit_script>();
+            //Link to intel_display
+            GameObject Attacker = HUD2Value.ElementA;
+            Unit_script Attacker_values = Attacker.GetComponent<Unit_script>();
 
             if(Attacker_values.name!=name && Attacker_values.Owner!=Owner) //Owner must be different
             {
                 if(Vector3.Distance(Attacker.transform.position,transform.position)< Attacker_values.Aim_limit *1.8)
                 {
-                    string description =
-                    type                +"\n"+"\r"+ //type
-                    "Chance : " +   ""  +"\n"+"\r"+ // Calcul des proba de réussite
-                    Owner               +"\n"+"\r"+ //Owner
-                    health +"/"+H_limit +"\n"+"\r"+ //Health
-                    mvt +"/"+M_limit    +"\n"+"\r"+ //Move
-                    ammo +"/"+A_limit             ; //Ammo
-
-                    HUD2Value.Attack_B_UI_update("none",description,this.gameObject);
+                    HUD2Value.Attack_B_UI_update(this.gameObject);
                 }
                 else
                 {
@@ -213,15 +194,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         {
             if(mvt>0f)//Mvt must be verified
             {
-                //Link to intel_display
-                string description =
-                type                +"\n"+"\r"+ //type
-                Owner               +"\n"+"\r"+ //Owner
-                health +"/"+H_limit +"\n"+"\r"+ //Health
-                mvt +"/"+M_limit    +"\n"+"\r"+ //Move
-                ammo +"/"+A_limit             ; //Ammo
-
-                HUD2Value.Move_A_UI_update("none",description,this.gameObject);
+                HUD2Value.Move_A_UI_update(this.gameObject);
             }
             else
             {

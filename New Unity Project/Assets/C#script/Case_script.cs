@@ -92,10 +92,21 @@ public class Case_script : MonoBehaviour
         }
         return returnValue; 
     }
-    
+    bool CheckVoisine(Case_script Case_to_check)
+    {
+        bool returnValue = false;
+        foreach(Case_script CaseVoisine in Cases_voisines)
+        {
+            if (CaseVoisine == Case_to_check)
+            {
+                returnValue = true;
+            }
+        }
+        return returnValue;
+    }
     public void Create_Building(
         string input_name,int input_health,
-        string input_type, string input_effect,int input_Owner)
+        Batiment_script Type, string input_effect,int input_Owner)
 
     { 
         HasCaseAnAdjacentBuilding();
@@ -107,12 +118,12 @@ public class Case_script : MonoBehaviour
             Batiment.transform.parent=transform;
             Batiment_Property.Owner=input_Owner;
             Batiment_Property.name =input_name;
-            Batiment_Property.type =input_type;
+            Batiment_Property.type = Batiment_script.BuildingType.Attack; //TBR
             Batiment_Property.health=input_health;
             Batiment_Property.Effect=input_effect;
             Batiment.transform.position= Position + new Vector3(0,1.1f,0);
             Batiment_Property.Position= Position + new Vector3(0,1.1f,0);
-            Batiment_Property.Case=name;
+            Batiment_Property.Occupied_case = this.gameObject.GetComponent<Case_script>();
 
             Owning_control = input_Owner;
             Supply = true;
@@ -154,15 +165,15 @@ public class Case_script : MonoBehaviour
                 GameObject HUD2= GameObject.Find("Phase II");
                 HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
                 GameObject Voyager=HUD.ElementA;
-                if (Vector3.Distance(Voyager.transform.position, transform.position)< 1.8f) //Case must be adjacente
+                Unit_script Voyager_values = Voyager.GetComponent<Unit_script>();
+                Case_script Origin_Case = Voyager_values.Occupied_case.GetComponent<Case_script>();
+                if (CheckVoisine(Origin_Case)) //Case must be adjacente
                 {
-                    string description =name + "\n"+"\r"+
-                    Terrain.name + "\n"+ "\r";
-                    HUD.Move_B_UI_update(Terrain.name,description,this.gameObject);
+                    HUD.Move_B_UI_update(this.gameObject);
                 }
                 else
                 {
-                    Debug.Log("case is to far");
+                    Debug.Log("This case is not a good choice");
                 }
             }
             else

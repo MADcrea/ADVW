@@ -4,18 +4,32 @@ using UnityEngine;
 
 public class Batiment_script : MonoBehaviour
 {
-    public string type;
-    public float health;
-    public float time_before_activation;
-    public Vector3 Position;
-    public string Case;
+    public enum BuildingType
+    {
+    Production,Unlock,Attack,Reload,Defense,Bonus,
+    }
+    public BuildingType type;
+    public float health; public float H_limit; public float ammo; public float A_limit;
+    public float reload; public float R_limit; 
+    public float aim; public float Aim_limit; 
+    public float spawn;
+    public Vector3 Position; public Case_script Occupied_case;
+    public bool activated;
     public string Effect;
     public int Owner;
+    public GameObject UI_Man; UI_Manager_script UI_values;
+    public GameObject HUD2GO; HUD2_display HUD2Value;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        activated = false;
+        health =1;
+        //Link to UI_Manager
+        UI_Man = GameObject.Find("UI_Manager");
+        UI_values = UI_Man.GetComponent<UI_Manager_script>();
+        HUD2GO =GameObject.Find("Phase II");
+        HUD2Value = HUD2GO.GetComponent<HUD2_display>();
     }
     // Update is called once per frame
     void Update()
@@ -23,7 +37,8 @@ public class Batiment_script : MonoBehaviour
         
     }
      //Set up is called after unit instantiation
-     public void set_up_batiment_value(){
+     public void set_up_batiment_value()
+    {
 
     }
     //Method called at building an new unit
@@ -41,69 +56,59 @@ public class Batiment_script : MonoBehaviour
             Debug.Log(name + " from owner " + Owner +" has been killed");
         }
     }
-    public void Change_Ammo_stock(float Ammo_change){}
+    public void Change_Ammo_stock(float Ammo_change)
+    {
+        if(ammo+Ammo_change< A_limit)
+        {
+            ammo=ammo+Ammo_change;
+        }
+    }
     //Method called to pass spawn turn
     public void Change_time_before_activation()
     {
-
+        if(spawn !=0)
+        {
+            spawn=spawn-1;
+        }
+        if(spawn==0)
+        {
+            activated=true;
+            health=H_limit;
+            ammo=A_limit;
+            reload=R_limit;
+            aim=Aim_limit;
+        }
     }
     private void OnMouseUp() 
     {
-         //Link to UI_Manager
-        GameObject UI_Man = GameObject.Find("UI_Manager");
-        UI_Manager_script UI_values = UI_Man.GetComponent<UI_Manager_script>();
-
         //Phase 2 Step Intel
-        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Intel)
-        {
-            //Link to intel_display
-            GameObject HUD2= GameObject.Find("Phase II");
-            HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-            HUD.Intel_UI_update(this.gameObject);
+        if (UI_values.Step == UI_Manager_script.StepType.Intel)
+        {           
+            HUD2Value.Intel_UI_update(this.gameObject);
         }
 
         //Phase 2 Step Attack A
         // Owner Must be verified
-        // Attack type must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Attack_A)
+        if (UI_values.Step == UI_Manager_script.StepType.Attack_A)
         {
-            //Link to intel_display
-            GameObject HUD2= GameObject.Find("Phase II");
-            HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-            string description =
-            type                +"\n"+"\r"+ //type
-            Owner               +"\n"+"\r"+ //Owner
-            health              +"\n"+"\r"+ //health
-            Effect ;
-
-            HUD.Attack_A_UI_update("none",description,this.gameObject);
+            if (type == BuildingType.Attack)
+            {
+                HUD2Value.Attack_A_UI_update(this.gameObject);
+            }
         }
 
         //Phase 2 Step Attack B
         //Owner must be verified
         //NOT a CITY must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Attack_B)
+        if (UI_values.Step == UI_Manager_script.StepType.Attack_B)
         {
-            //Link to intel_display
-            GameObject HUD2= GameObject.Find("Phase II");
-            HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-            string description =
-            type                +"\n"+"\r"+ //type
-            "Chance : "+""      +"\n"+"\r"+ // Calcul des proba de réussite
-            Owner               +"\n"+"\r"+ //Owner
-            health              +"\n"+"\r"+ //health
-            Effect ;
-
-            HUD.Attack_B_UI_update("none",description,this.gameObject);
+            HUD2Value.Attack_B_UI_update(this.gameObject);
         }
 
         //Phase 2 Step Self-Destruct
         //Owner must be verified
-        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.SD_A)
+        if (UI_values.Step == UI_Manager_script.StepType.SD_A)
         {
-            //Link to intel_display
-            GameObject HUD2= GameObject.Find("Phase II");
-            HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
             string description =
             type                +"\n"+"\r"+ //type
             "Chance : 87%" + "" +"\n"+"\r"+ // proba fixe de 87% (ne pas faire 1 sur un dé à 6 faces)
@@ -111,7 +116,7 @@ public class Batiment_script : MonoBehaviour
             health              +"\n"+"\r"+ //health
             Effect ;
 
-            HUD.SD_UI_update("none",description,this.gameObject);
+            HUD2Value.SD_UI_update("none",description,this.gameObject);
         }
     }
 }
