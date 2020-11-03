@@ -154,14 +154,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         //Phase 2 Step Intel
         if (UI_values.Step == UI_Manager_script.StepType.Intel)
         {
-            string description = 
-            type                +"\n"+"\r"+ //type
-            Owner               +"\n"+"\r"+ //Owner
-            health +"/"+H_limit +"\n"+"\r"+ //Health
-            mvt +"/"+M_limit    +"\n"+"\r"+ //Move
-            ammo +"/"+A_limit             ; //Ammo
-
-            HUD2Value.Intel_UI_update("none",description,this.gameObject);
+            HUD2Value.Intel_UI_update(this.gameObject);
         }
 
         //Phase 2 Step Attack A

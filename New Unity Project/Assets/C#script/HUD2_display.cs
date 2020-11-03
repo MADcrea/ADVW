@@ -6,16 +6,13 @@ using TMPro;
 
 public class HUD2_display : MonoBehaviour
 {
-    public GameObject UI_Man;
-    public GameObject PH2_Intel;
-    public CanvasGroup Intel_UI;
-    public GameObject PH2_Attack;
-    public CanvasGroup Attack_UI;
-    public GameObject PH2_Move;
-    public CanvasGroup Move_UI;
-    public GameObject PH2_SD;
-    public CanvasGroup SD_UI;
-    public UI_Manager_script UI_values;
+    public GameObject UI_Man;       public UI_Manager_script UI_values;
+    public GameObject PH2_Intel;    public CanvasGroup Intel_UI;
+    public Image Image_icon; public Text TYPE_text; public Text HV_text; public Text HL_text;
+    public Text AV_text; public Text AL_text; public Text MV_text; public Text ML_text; public Text Player_text;
+    public GameObject PH2_Attack;   public CanvasGroup Attack_UI;
+    public GameObject PH2_Move;     public CanvasGroup Move_UI;
+    public GameObject PH2_SD;       public CanvasGroup SD_UI;
     public GameObject ElementA;
     public GameObject ElementB;
 
@@ -38,47 +35,63 @@ public class HUD2_display : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+    public bool HideShowHUD(CanvasGroup HUDtoHideorShow)
+    {
+        if (HUDtoHideorShow.alpha == 0){
+             HUDtoHideorShow.alpha = 1;
+             HUDtoHideorShow.interactable = true;
+             HUDtoHideorShow.blocksRaycasts = true;
+            return true;
+        }
+        else
+        {
+             HUDtoHideorShow.alpha = 0;
+             HUDtoHideorShow.interactable = false;
+             HUDtoHideorShow.blocksRaycasts =false ;
+             return false;
+        }  
     }
     //Intel Methods
     public void Intel_display (int a)
     {
-        if (Intel_UI.alpha == 0){
-             Intel_UI.alpha = 1;
-             Intel_UI.interactable = true;
-             Intel_UI.blocksRaycasts = true;
-            //Change UI_Manager step value
+        if(HideShowHUD(Intel_UI))
+        {
             UI_values.Step=UI_Manager_script.StepType.Intel;
- 
-        }else{
-             Intel_UI.alpha = 0;
-             Intel_UI.interactable = false;
-             Intel_UI.blocksRaycasts =false ;
-             UI_values.Step = UI_Manager_script.StepType.none;
+        }
+        else
+        {
+            Image_icon.material = Resources.Load<Material>("Textures/UI_Blank");
+            TYPE_text.text = "";
+            HV_text.text =  "";
+            HL_text.text =  "";
+            AV_text.text =  "";
+            AL_text.text=  "";
+            MV_text.text=  "";
+            ML_text.text=  "";
+            Player_text.text=  "";
+            UI_values.Step = UI_Manager_script.StepType.none;
         }  
-        
     }
     //Attack Methods
     public void Attack_display (int a)
     {
-         
-         if (Attack_UI.alpha == 0){
-             Attack_UI.alpha = 1;
-             Attack_UI.interactable = true;
-             Attack_UI.blocksRaycasts =true;
-             UI_values.Step=UI_Manager_script.StepType.Attack_A;
- 
-         }else{
-             Attack_cancel(1);
+        if(HideShowHUD(Attack_UI))
+        {
+            UI_values.Step=UI_Manager_script.StepType.Attack_A;
         }
+        else
+        {
+            Attack_cancel(1);
+        } 
     }
     public void Attack_cancel (int a)
     {
         //Mise en blanc de tous les champs
 
         //Fermeture UI_Attack
-        Attack_UI.alpha = 0;
-        Attack_UI.interactable = false;
-        Attack_UI.blocksRaycasts =false;
+        HideShowHUD(Attack_UI);
         UI_values.Step =UI_Manager_script.StepType.none;
         ElementA = null;
         ElementB = null;
@@ -133,14 +146,13 @@ public class HUD2_display : MonoBehaviour
     //Move Methods
     public void Move_display (int a)
     {
-         if (Move_UI.alpha == 0){
-             Move_UI.alpha = 1;
-             Move_UI.interactable = true;
-             Move_UI.blocksRaycasts =true;
-             UI_values.Step =UI_Manager_script.StepType.Move_A;
- 
-         }else{
-             Move_Cancel(1);
+        if(HideShowHUD(Move_UI))
+        {
+            UI_values.Step=UI_Manager_script.StepType.Move_A;
+        }
+        else
+        {
+            Move_Cancel(1);
         }   
     }
     public void Move_Cancel (int a)
@@ -148,9 +160,7 @@ public class HUD2_display : MonoBehaviour
         // Mise en blanc de tous les champs
         
         //Fermeture UI_Move
-        Move_UI.alpha = 0;
-        Move_UI.interactable = false;
-        Move_UI.blocksRaycasts =false;
+        HideShowHUD(Move_UI);
         UI_values.Step =UI_Manager_script.StepType.none;
         ElementA = null;
         ElementB =null;
@@ -174,15 +184,14 @@ public class HUD2_display : MonoBehaviour
     //Self destruct Methods
     public void SD_display (int a)
     {
-         if (SD_UI.alpha == 0){
-             SD_UI.alpha = 1;
-             SD_UI.interactable = true;
-             SD_UI.blocksRaycasts =true;
-             UI_values.Step =UI_Manager_script.StepType.SD_A;
- 
-         }else{
-             SD_cancel(1);
-        }   
+        if(HideShowHUD(Move_UI))
+        {
+            UI_values.Step=UI_Manager_script.StepType.SD_A;
+        }
+        else
+        {
+            SD_cancel(1);
+        }
     }
     public void SD_cancel (int a)
     {
@@ -190,9 +199,7 @@ public class HUD2_display : MonoBehaviour
         
 
         //Fermeture UI_SD
-        SD_UI.alpha =0;
-        SD_UI.interactable =false;
-        SD_UI.blocksRaycasts =false;
+        HideShowHUD(SD_UI);
         UI_values.Step =UI_Manager_script.StepType.none;
         ElementA = null;
 
@@ -228,20 +235,77 @@ public class HUD2_display : MonoBehaviour
     //End Turn Methods
     public void End_turn (int a)
     {
-        UI_values .ChangePlayerTurn();
+        UI_values.ChangePlayerTurn();
+    }
+    
+    public int WhatKindOfObjectIsThisOne(GameObject Object)
+    {
+    //What type of GameObject (TOKEN) ?
+        int returnValue;
+        returnValue=0;
+        if( Object.GetComponent("Unit_script") as Unit_script!=null)
+        {
+            returnValue= 1; //TOKEN is unit
+        }
+        if( Object.GetComponent("Batiment_script") as Batiment_script !=null)
+        {
+            returnValue= 2; //TOKEN is batiment
+        }
+        if( Object.GetComponent("Case_script") as Case_script!=null)
+        {
+            returnValue= 3; //TOKEN is case
+        }
+        return returnValue;
     }
     //UI update Methods
-    public void Intel_UI_update (string icon, string description,GameObject Object)
+    public void Intel_UI_update (GameObject Object)
     {
-        //Changement d'icon
-        GameObject UI = GameObject.Find("Intel_icon");
-        Image UI_icon = UI.GetComponent<Image>();
-        UI_icon.material = Resources.Load<Material>("Textures/UI_"+icon);
-
-        //Changement de texte
-        GameObject UI2=GameObject.Find("Intel_text");
-        Text UI_text= UI2.GetComponent<Text>();
-        UI_text.text = description;
+        //Find object type and display according to
+        switch(WhatKindOfObjectIsThisOne(Object))
+        {
+            case 0:
+                Debug.Log("Object Type cannot be defined");
+                break;
+            case 1:
+                Unit_script UnitValues = Object.GetComponent<Unit_script>();
+                //Display
+                Image_icon.material = Resources.Load<Material>("Textures/UI_"+UnitValues.type);
+                TYPE_text.text = UnitValues.type.ToString();
+                HV_text.text = UnitValues.health.ToString();
+                HL_text.text = UnitValues.H_limit.ToString();
+                AV_text.text = UnitValues.ammo.ToString();
+                AL_text.text= UnitValues.A_limit.ToString();
+                MV_text.text= UnitValues.mvt.ToString();
+                ML_text.text= UnitValues.M_limit.ToString();
+                Player_text.text= UnitValues.Owner.ToString();
+                break;
+            case 2:
+                Batiment_script BuildingValues = Object.GetComponent<Batiment_script>();
+                //Display
+                Image_icon.material = Resources.Load<Material>("Textures/UI_"+BuildingValues.type);
+                TYPE_text.text = BuildingValues.type.ToString();
+                HV_text.text =  "";
+                HL_text.text =  "";
+                AV_text.text =  "";
+                AL_text.text=  "";
+                MV_text.text=  "";
+                ML_text.text=  "";
+                Player_text.text=  "";
+                break;
+            case 3:
+                Case_script CaseValues = Object.GetComponent<Case_script>();
+                //Display
+                Image_icon.material = Resources.Load<Material>("Textures/UI_"+CaseValues.Terrain.name);
+                TYPE_text.text = CaseValues.Terrain.name.ToString();
+                HV_text.text = "N/A";
+                HL_text.text = "N/A";
+                AV_text.text = "N/A";
+                AL_text.text = "N/A";
+                MV_text.text = "N/A";
+                ML_text.text = "N/A";
+                Player_text.text= CaseValues.Occupation.ToString();
+                break;
+        }
     }
     public void Attack_A_UI_update (string icon, string description,GameObject Object)
     {

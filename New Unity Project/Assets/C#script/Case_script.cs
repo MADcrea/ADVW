@@ -142,11 +142,7 @@ public class Case_script : MonoBehaviour
             //Link to intel_display
             GameObject HUD2= GameObject.Find("Phase II");
             HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-            string description =name + "\n"+"\r"+
-            Terrain.name + "\n"+ "\r"+
-            "Owned by : " +Owning_control +"\n"+ "\r"+
-            Occupation +" of use";
-            HUD.Intel_UI_update(Terrain.name,description,this.gameObject);
+            HUD.Intel_UI_update(this.gameObject);
         }
         
         //Phase 2 Step Move B
