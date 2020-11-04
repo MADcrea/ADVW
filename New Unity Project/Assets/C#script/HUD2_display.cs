@@ -7,6 +7,14 @@ using TMPro;
 public class HUD2_display : MonoBehaviour
 {
     public GameObject UI_Man;       public UI_Manager_script UI_values;
+    //Token reference
+    public enum TokenType
+    {
+        Unit,
+        Building,
+        Case,
+        Default,
+    } public TokenType Token;
     //Intel reference
     public GameObject PH2_Intel;    public CanvasGroup Intel_UI;
     public Image Image_icon; public Text TYPE_text; public Text HV_text; public Text HL_text;
@@ -133,20 +141,20 @@ public class HUD2_display : MonoBehaviour
             //Attacker loses 1 ammo
             switch(WhatKindOfObjectIsThisOne(ElementA))
             {
-                case 0: 
+                case TokenType.Default: 
                     Debug.Log("ElementA Type cannot be defined");
                     break;
-                case 1:
+                case TokenType.Unit:
                     Unit_script UnitValues = ElementA.GetComponent<Unit_script>();
                     //Call function reducing ammo
                     UnitValues.Change_Ammo_stock(-1f);
                     break;
-                case 2:
+                case TokenType.Building:
                     Batiment_script BuildingValues = ElementA.GetComponent<Batiment_script>();
                     //Call function reducing ammo
                     BuildingValues.Change_Ammo_stock(-1f);
                     break;
-                case 3:
+                case TokenType.Case:
                 Debug.Log("Case cannot attack / No function available");
                 break;
             }
@@ -155,20 +163,20 @@ public class HUD2_display : MonoBehaviour
             {
                 switch(WhatKindOfObjectIsThisOne(ElementB))
                 {
-                    case 0: 
+                    case TokenType.Default: 
                         Debug.Log("Object Type cannot be defined");
                         break;
-                    case 1:
+                    case TokenType.Unit:
                         Unit_script UnitValues = ElementB.GetComponent<Unit_script>();
                         //Call function reducing ammo
                         UnitValues.Change_Health_stock(-1f);
                         break;
-                    case 2:
+                    case TokenType.Building:
                         Batiment_script BuildingValues = ElementA.GetComponent<Batiment_script>();
                         //Call function reducing ammo
                         BuildingValues.Change_Health_stock(-1f);
                         break;
-                    case 3:
+                    case TokenType.Case:
                     Debug.Log("Case cannot be attacked / No function available");
                     break;
                 }
@@ -266,16 +274,24 @@ public class HUD2_display : MonoBehaviour
             GameObject SDer =ElementA;
             if(random_value >= success_value)
             {
-                if( ElementA.GetComponent("Unit_script") as Unit_script!=null){    
-                    Unit_script SDer_values = SDer.GetComponent<Unit_script>();
-                    //Success? => loose health
-                    SDer_values.Change_Health_stock(-10f);
-                    
-                }else{
-                    Batiment_script SDer_values = SDer.GetComponent<Batiment_script>();
-                    //Success? => loose health
-                    SDer_values.Change_Health_stock(-10f);
-                    
+                switch (WhatKindOfObjectIsThisOne(ElementA))
+                {
+                    case TokenType.Default:
+                         Debug.Log("Object Type cannot be defined");
+                        break;
+                    case TokenType.Unit:
+                        Unit_script Unit_values = SDer.GetComponent<Unit_script>();
+                        //Success? => loose health
+                        Unit_values.Change_Health_stock(-10f);
+                        break;
+                    case TokenType.Building:               
+                        Batiment_script Building_values = SDer.GetComponent<Batiment_script>();
+                        //Success? => loose health
+                        Building_values.Change_Health_stock(-10f);
+                        break;
+                    case TokenType.Case:
+                        Debug.Log("Case cannot Self-destruct / No function available");
+                        break;
                 }
             }
             SD_cancel(1);
@@ -288,22 +304,22 @@ public class HUD2_display : MonoBehaviour
         UI_values.ChangePlayerTurn();
     }
     
-    public int WhatKindOfObjectIsThisOne(GameObject Object)
+    public TokenType WhatKindOfObjectIsThisOne(GameObject Object)
     {
     //What type of GameObject (TOKEN) ?
-        int returnValue;
-        returnValue=0;
+        TokenType returnValue;
+        returnValue = TokenType.Default;
         if( Object.GetComponent("Unit_script") as Unit_script!=null)
         {
-            returnValue= 1; //TOKEN is unit
+            returnValue= TokenType.Unit; //TOKEN is unit
         }
         if( Object.GetComponent("Batiment_script") as Batiment_script !=null)
         {
-            returnValue= 2; //TOKEN is batiment
+            returnValue= TokenType.Building; //TOKEN is batiment
         }
         if( Object.GetComponent("Case_script") as Case_script!=null)
         {
-            returnValue= 3; //TOKEN is case
+            returnValue= TokenType.Case; //TOKEN is case
         }
         return returnValue;
     }
@@ -313,10 +329,10 @@ public class HUD2_display : MonoBehaviour
         //Find object type and display according to
         switch(WhatKindOfObjectIsThisOne(Object))
         {
-            case 0:
+            case TokenType.Default:
                 Debug.Log("Object Type cannot be defined");
                 break;
-            case 1:
+            case TokenType.Unit:
                 Unit_script UnitValues = Object.GetComponent<Unit_script>();
                 //Display
                 Image_icon.material = Resources.Load<Material>("Textures/UI_"+UnitValues.type);
@@ -329,7 +345,7 @@ public class HUD2_display : MonoBehaviour
                 ML_text.text= UnitValues.M_limit.ToString();
                 Player_text.text= UnitValues.Owner.ToString();
                 break;
-            case 2:
+            case TokenType.Building:
                 Batiment_script BuildingValues = Object.GetComponent<Batiment_script>();
                 //Display
                 Image_icon.material = Resources.Load<Material>("Textures/UI_"+BuildingValues.type);
@@ -342,7 +358,7 @@ public class HUD2_display : MonoBehaviour
                 ML_text.text=  "";
                 Player_text.text=  "";
                 break;
-            case 3:
+            case TokenType.Case:
                 Case_script CaseValues = Object.GetComponent<Case_script>();
                 //Display
                 Image_icon.material = Resources.Load<Material>("Textures/UI_"+CaseValues.Terrain.name);
@@ -362,10 +378,10 @@ public class HUD2_display : MonoBehaviour
         //Find object type and display according to
         switch(WhatKindOfObjectIsThisOne(Object))
         {
-             case 0:
+             case TokenType.Default:
                 Debug.Log("Object Type cannot be defined");
                 break;
-            case 1:
+            case TokenType.Unit:
                 Unit_script UnitValues = Object.GetComponent<Unit_script>();
                 //Display
                 Attacker_icon.material= Resources.Load<Material>("Textures/UI_"+UnitValues.type);
@@ -377,7 +393,7 @@ public class HUD2_display : MonoBehaviour
                 Attacker_ML.text = UnitValues.M_limit.ToString();
                 Attacker_Player.text = UnitValues.Owner.ToString();
                 break;
-            case 2:
+            case TokenType.Building:
                 Batiment_script BuildingValues = Object.GetComponent<Batiment_script>();
                 //Display
                 Attacker_icon.material = Resources.Load<Material>("Textures/UI_"+BuildingValues.type);
@@ -389,7 +405,7 @@ public class HUD2_display : MonoBehaviour
                 Attacker_ML.text ="N/A";
                 Attacker_Player.text =BuildingValues.Owner.ToString();
                 break;
-            case 3:
+            case TokenType.Case:
                 Debug.Log("Case cannot attack / No function available");
                 break;
         }
@@ -405,10 +421,10 @@ public class HUD2_display : MonoBehaviour
             //Find object type and display according to
             switch(WhatKindOfObjectIsThisOne(Object))
             {
-                case 0:
+                case TokenType.Default:
                     Debug.Log("Object Type cannot be defined");
                     break;
-                case 1:
+                case TokenType.Unit:
                     Unit_script UnitValues = Object.GetComponent<Unit_script>();
                     //Display
                     Attacked_icon.material= Resources.Load<Material>("Textures/UI_"+UnitValues.type);
@@ -420,7 +436,7 @@ public class HUD2_display : MonoBehaviour
                     Attacked_ML.text = UnitValues.M_limit.ToString();
                     Attacked_Player.text = UnitValues.Owner.ToString();
                     break;
-                case 2:
+                case TokenType.Building:
                     Batiment_script BuildingValues = Object.GetComponent<Batiment_script>();
                     //Display
                     Attacked_icon.material = Resources.Load<Material>("Textures/UI_"+BuildingValues.type);
@@ -432,7 +448,7 @@ public class HUD2_display : MonoBehaviour
                     Attacked_ML.text ="N/A";
                     Attacked_Player.text =BuildingValues.Owner.ToString();
                     break;
-                case 3:
+                case TokenType.Case:
                     Debug.Log("Case cannot be attacked / No function available");
                     break;
             }

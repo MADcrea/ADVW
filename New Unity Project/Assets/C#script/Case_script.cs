@@ -37,9 +37,19 @@ public class Case_script : MonoBehaviour
     public Case_script Actual_property;
     public GameObject UI_case_Prefab;
 
+    public GameObject UI_Man; UI_Manager_script UI_values;
+    public GameObject HUD2GO; HUD2_display HUD2Value;
+
     // Start is called before the first frame update
     void Start()
     {
+         //Link to UI_Manager
+        GameObject UI_Man = GameObject.Find("UI_Manager");
+        UI_values = UI_Man.GetComponent<UI_Manager_script>();
+        //Link to intel_display
+        GameObject HUD2GO= GameObject.Find("Phase II");
+        HUD2Value = HUD2GO.GetComponent<HUD2_display>();
+        
         Owning_control =-1;
         Supply =false;
         Occupation=OccupationType.Free;       
@@ -136,10 +146,6 @@ public class Case_script : MonoBehaviour
      }
      private void OnMouseUp() 
     {
-         //Link to UI_Manager
-        GameObject UI_Man = GameObject.Find("UI_Manager");
-        UI_Manager_script UI_values = UI_Man.GetComponent<UI_Manager_script>();
-
         //Phase 1 Step Case selection for unit
         if (UI_values.Phase_number ==1 && UI_values.Step ==UI_Manager_script.StepType.Token_creation_case)
         {
@@ -150,10 +156,7 @@ public class Case_script : MonoBehaviour
         //Phase 2 Step Intel
         if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Intel)
         {
-            //Link to intel_display
-            GameObject HUD2= GameObject.Find("Phase II");
-            HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-            HUD.Intel_UI_update(this.gameObject);
+            HUD2Value.Intel_UI_update(this.gameObject);
         }
         
         //Phase 2 Step Move B
@@ -161,15 +164,13 @@ public class Case_script : MonoBehaviour
         {
             if(Occupation==OccupationType.Free) //Case must be free
             {
-                //Link to Move_display
-                GameObject HUD2= GameObject.Find("Phase II");
-                HUD2_display HUD = HUD2.GetComponent<HUD2_display>();
-                GameObject Voyager=HUD.ElementA;
+                GameObject Voyager=HUD2Value.ElementA;
                 Unit_script Voyager_values = Voyager.GetComponent<Unit_script>();
+                //Debug.Log(Voyager.name);
                 Case_script Origin_Case = Voyager_values.Occupied_case.GetComponent<Case_script>();
                 if (CheckVoisine(Origin_Case)) //Case must be adjacente
                 {
-                    HUD.Move_B_UI_update(this.gameObject);
+                    HUD2Value.Move_B_UI_update(this.gameObject);
                 }
                 else
                 {
