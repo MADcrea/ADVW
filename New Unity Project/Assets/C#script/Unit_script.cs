@@ -11,7 +11,8 @@ public enum UnitType
     Bazooka,
     Jeep,
     Tank, 
-    Artillery
+    Artillery,
+    Default
 }
 public UnitType type;
 public float health; public float H_limit; public float mvt; public float M_limit;
@@ -28,8 +29,6 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
     {   
         activated = false;
         health =1;
-        type = UnitType.Rifle;
-        Set_up_unit_values();
         Recolte();
         //Link to UI_Manager
         UI_Man = GameObject.Find("UI_Manager");
@@ -43,8 +42,15 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
     {
         
     }
+    public void Change_Color()
+    {
+        Material Color = Resources.Load<Material>("Textures/P"+Owner);
+        MeshRenderer meshRenderer = this.gameObject.GetComponent<MeshRenderer>();
+        // Set the new material on the GameObject
+        meshRenderer.material = Color;
+    }
     //Set up is called after unit instantiation
-    public void Set_up_unit_values()
+    public void Set_up_unit_values(UnitType type)
     {
         switch (type)
         {

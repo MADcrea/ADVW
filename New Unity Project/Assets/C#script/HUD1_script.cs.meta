@@ -3,7 +3,28 @@ guid: 744aa834bf7bc4841a6f755bb27c40c5
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - UI_Man: {instanceID: 0}
+  - UI_values: {instanceID: 0}
+  - Display_status: {instanceID: 0}
+  - S_P: {instanceID: 0}
+  - E_P: {instanceID: 0}
+  - M_P: {instanceID: 0}
+  - D_P: {instanceID: 0}
+  - S_S: {instanceID: 0}
+  - E_S: {instanceID: 0}
+  - M_S: {instanceID: 0}
+  - D_S: {instanceID: 0}
+  - Intel: {instanceID: 0}
+  - P1: {instanceID: 0}
+  - P2: {instanceID: 0}
+  - P3: {instanceID: 0}
+  - P4: {instanceID: 0}
+  - Values_P1: {instanceID: 0}
+  - Values_P2: {instanceID: 0}
+  - Values_P3: {instanceID: 0}
+  - Values_P4: {instanceID: 0}
+  - UnitPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

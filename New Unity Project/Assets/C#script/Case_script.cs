@@ -38,6 +38,7 @@ public class Case_script : MonoBehaviour
     public GameObject UI_case_Prefab;
 
     public GameObject UI_Man; UI_Manager_script UI_values;
+    public GameObject HUD1GO; HUD1_script HUD1Value;
     public GameObject HUD2GO; HUD2_display HUD2Value;
 
     // Start is called before the first frame update
@@ -46,7 +47,10 @@ public class Case_script : MonoBehaviour
          //Link to UI_Manager
         GameObject UI_Man = GameObject.Find("UI_Manager");
         UI_values = UI_Man.GetComponent<UI_Manager_script>();
-        //Link to intel_display
+        //Link to HUD1_display
+        GameObject HUD1GO= GameObject.Find("Phase I");
+        HUD1Value = HUD1GO.GetComponent<HUD1_script>();
+        //Link to HUD2_display
         GameObject HUD2GO= GameObject.Find("Phase II");
         HUD2Value = HUD2GO.GetComponent<HUD2_display>();
         
@@ -63,7 +67,7 @@ public class Case_script : MonoBehaviour
     void Update()
     {        
         
-     }
+    }
     bool HasCaseAnAdjacentBuilding()
     {
         bool returnValue = false;
@@ -75,6 +79,19 @@ public class Case_script : MonoBehaviour
             }
         }
         return returnValue;
+    }
+    bool HasCaseAnAdjacentAllyBuilding()
+    {
+        bool returnValue = false;
+        foreach(Case_script CaseVoisine in Cases_voisines)
+        {
+            if (CaseVoisine.Occupation == OccupationType.Building 
+                && CaseVoisine.Owning_control == Owning_control)
+            {
+                returnValue = true;
+            }
+        }
+        return returnValue; 
     }
     bool HasCaseAnAdjacentEnemyUnit()
     {
@@ -102,6 +119,7 @@ public class Case_script : MonoBehaviour
         }
         return returnValue; 
     }
+    
     bool CheckVoisine(Case_script Case_to_check)
     {
         bool returnValue = false;
@@ -114,43 +132,22 @@ public class Case_script : MonoBehaviour
         }
         return returnValue;
     }
-    public void Create_Building(
-        string input_name,int input_health,
-        Batiment_script Type, string input_effect,int input_Owner)
-
-    { 
-        HasCaseAnAdjacentBuilding();
-        //Créer un Building si pas de building adjacent et pas d'unités ennemies adjacentes.
-        if(Cases_batiment_voisines.Count== 0 && Cases_ennemies_voisines.Count==0)
-        {
-            GameObject Batiment= (GameObject) Instantiate (BatimentPrefab);
-            Batiment_script Batiment_Property =  Batiment.AddComponent<Batiment_script>();
-            Batiment.transform.parent=transform;
-            Batiment_Property.Owner=input_Owner;
-            Batiment_Property.name =input_name;
-            Batiment_Property.type = Batiment_script.BuildingType.Attack; //TBR
-            Batiment_Property.health=input_health;
-            Batiment_Property.Effect=input_effect;
-            Batiment.transform.position= Position + new Vector3(0,1.1f,0);
-            Batiment_Property.Position= Position + new Vector3(0,1.1f,0);
-            Batiment_Property.Occupied_case = this.gameObject.GetComponent<Case_script>();
-
-            Owning_control = input_Owner;
-            Supply = true;
-            Occupation = OccupationType.Building;
-        }
-        else 
-        {
-        
-        }
-     }
-     private void OnMouseUp() 
+    private void OnMouseUp() 
     {
         //Phase 1 Step Case selection for unit
         if (UI_values.Phase_number ==1 && UI_values.Step ==UI_Manager_script.StepType.Token_creation_case)
         {
             //Check if case is free
-            //Check if valid building is near
+            if (Occupation == OccupationType.Free)
+            {
+                //Check if valid building is near
+                if(true /*HasCaseAnAdjacentAllyBuilding()*/)
+                {
+                    //Send Case adress to GameManager (HUD1)
+                    HUD1Value.Unit_Deployment(this.gameObject);
+                }
+            }
+
         }
 
         //Phase 2 Step Intel

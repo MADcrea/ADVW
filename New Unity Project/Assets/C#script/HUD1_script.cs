@@ -22,8 +22,11 @@ public class HUD1_script : MonoBehaviour
     public Player_script Values_P1;public Player_script Values_P2;
     public Player_script Values_P3;public Player_script Values_P4;
 
-    //Case selection to deploy unit and building
-    public string Selection; //Name of selected case
+    //Unit about to be deploy
+    public Unit_script.UnitType Unit_To_Be_Deployed;
+    public GameObject UnitPrefab;
+    public int UnitDeployed;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +42,8 @@ public class HUD1_script : MonoBehaviour
         Player_script Values_P4 = P4.GetComponent<Player_script>();
         
         //Set-up Phase 1
-        Selection = "";
+        UnitDeployed =0;
+        Unit_To_Be_Deployed = Unit_script.UnitType.Default;
         Intel.text="";
       
     }
@@ -78,16 +82,43 @@ public class HUD1_script : MonoBehaviour
         if(UI_values.Phase_number!= 1)
         {
             Display_status.alpha=0;
-            Display_status.interactable=true;
-            Display_status.blocksRaycasts=true;
+            Display_status.interactable=false;
+            Display_status.blocksRaycasts=false;
         }
         else
         {
             Display_status.alpha=1;
-            Display_status.interactable=false;
-            Display_status.blocksRaycasts=false;
+            Display_status.interactable=true;
+            Display_status.blocksRaycasts=true;
         }
        }
+    public void Unit_Deployment(GameObject Deployment_Case)
+    {
+        //GameObject Selected_case => Case_script
+            Case_script Deployment_zone = Deployment_Case.GetComponent<Case_script>();
+        //Unit_creation
+            GameObject NewUnit= (GameObject) Instantiate (UnitPrefab);
+            Unit_script NewUnitValue =  NewUnit.GetComponent<Unit_script>();
+        //Unit Set_up
+            //GameObject
+            NewUnit.name = "UNIT_" + UnitDeployed;
+            NewUnit.transform.position = Deployment_Case.transform.position + new Vector3(0,0.2f,0);
+            //Unit values
+            NewUnitValue.Owner = UI_values.Player_turn;
+            NewUnitValue.Occupied_case = Deployment_zone;
+            NewUnitValue.Set_up_unit_values(Unit_To_Be_Deployed);
+            //Color
+            NewUnitValue.Change_Color();
+        
+        //Case update
+            Deployment_zone.OccupingUnit = NewUnitValue;
+            Deployment_zone.Occupation = Case_script.OccupationType.Unit;
+        
+        //Miscellaneous
+            UnitDeployed++;
+            UI_values.Step=UI_Manager_script.StepType.none;
+            Intel.text ="P"+UI_values.Player_turn+" created "+Unit_To_Be_Deployed;
+    }
     public void BT_ADD_Rifle(int a){
         //player must have enough ressources: 1 Steel and 1 Devise
         if(float.Parse(S_S.text) > 0 && float.Parse(D_S.text) > 0)
@@ -95,11 +126,13 @@ public class HUD1_script : MonoBehaviour
             //=>Update information message
             Intel.text="Rifle can be created, where do you want it to be deployed?";
             UI_values.Step = UI_Manager_script.StepType.Token_creation_case;
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Rifle;
         }
         else
         {
             //=>Update information message
             Intel.text="You don't have enough ressources to deploy a new unit.";
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Default;
         }
 
     }
@@ -108,19 +141,5 @@ public class HUD1_script : MonoBehaviour
     public void BT_ADD_Tank(int a){}
     public void BT_ADD_Artillery(int a){}
 
-    public void Is_selected_case_ok()
-    {
-        /*
-        Unit
-        Deploy location must be :
-        -free of occupation
-        -next to an activated building of the same player
-
-        Building
-        Deploy location must be :
-        -free of occupation
-        -next to an activated unit of the same player
-        -no adjacent building from any player
-        */
-    }
+    
 }
