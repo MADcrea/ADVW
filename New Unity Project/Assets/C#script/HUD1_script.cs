@@ -21,6 +21,7 @@ public class HUD1_script : MonoBehaviour
     public GameObject P1;public GameObject P2;public GameObject P3;public GameObject P4;
     public Player_script Values_P1;public Player_script Values_P2;
     public Player_script Values_P3;public Player_script Values_P4;
+    public Player_script PlayerToPlay;
 
     //Unit about to be deploy
     public Unit_script.UnitType Unit_To_Be_Deployed;
@@ -47,38 +48,40 @@ public class HUD1_script : MonoBehaviour
         Intel.text="";
       
     }
-
+    public void WhosGonnaPlay()
+    {
+        switch(UI_values.Player_turn)
+        {
+            case 0:
+                break; //Game have not started    
+            case 1:
+                AffectPlayer(Values_P1);
+                break;
+            case 2:
+                AffectPlayer(Values_P2);
+                break;
+            case 3:
+                AffectPlayer(Values_P3);
+                break;
+            case 4:
+                AffectPlayer(Values_P4);
+                break;
+        }
+    }
+    public void AffectPlayer(Player_script Player)
+    {
+        PlayerToPlay = Player;
+    }
     // Update is called once per frame
     void Update()
     {
-        if(UI_values.Player_turn == 1)
-        {
-            S_P.text=Values_P1.Steel_prod.ToString(); S_S.text = Values_P1.Steel_stock.ToString();
-            E_P.text=Values_P1.Energy_prod.ToString(); E_S.text=Values_P1.Energy_stock.ToString();
-            M_P.text=Values_P1.Brick_prod.ToString(); M_S.text=Values_P1.Brick_stock.ToString();
-            D_P.text=Values_P1.Money_prod.ToString(); D_S.text=Values_P1.Money_stock.ToString();
-        }
-        if(UI_values.Player_turn == 2)
-        {
-            S_P.text=Values_P2.Steel_prod.ToString(); S_S.text = Values_P2.Steel_stock.ToString();
-            E_P.text=Values_P2.Energy_prod.ToString(); E_S.text=Values_P2.Energy_stock.ToString();
-            M_P.text=Values_P2.Brick_prod.ToString(); M_S.text=Values_P2.Brick_stock.ToString();
-            D_P.text=Values_P2.Money_prod.ToString(); D_S.text=Values_P2.Money_stock.ToString();
-        }
-        if(UI_values.Player_turn == 3)
-        {
-            S_P.text=Values_P3.Steel_prod.ToString(); S_S.text = Values_P3.Steel_stock.ToString();
-            E_P.text=Values_P3.Energy_prod.ToString(); E_S.text=Values_P3.Energy_stock.ToString();
-            M_P.text=Values_P3.Brick_prod.ToString(); M_S.text=Values_P3.Brick_stock.ToString();
-            D_P.text=Values_P3.Money_prod.ToString(); D_S.text=Values_P3.Money_stock.ToString();
-        }
-        if(UI_values.Player_turn == 4)
-        {
-            S_P.text=Values_P4.Steel_prod.ToString(); S_S.text = Values_P4.Steel_stock.ToString();
-            E_P.text=Values_P4.Energy_prod.ToString(); E_S.text=Values_P4.Energy_stock.ToString();
-            M_P.text=Values_P4.Brick_prod.ToString(); M_S.text=Values_P4.Brick_stock.ToString();
-            D_P.text=Values_P4.Money_prod.ToString(); D_S.text=Values_P4.Money_stock.ToString();
-        }
+        //Display ressources and production of Player
+        WhosGonnaPlay();
+        S_P.text=PlayerToPlay.Steel_prod.ToString(); S_S.text = PlayerToPlay.Steel_stock.ToString();
+        E_P.text=PlayerToPlay.Energy_prod.ToString(); E_S.text=PlayerToPlay.Energy_stock.ToString();
+        M_P.text=PlayerToPlay.Brick_prod.ToString(); M_S.text=PlayerToPlay.Brick_stock.ToString();
+        D_P.text=PlayerToPlay.Money_prod.ToString(); D_S.text=PlayerToPlay.Money_stock.ToString();
+        
         if(UI_values.Phase_number!= 1)
         {
             Display_status.alpha=0;
@@ -94,34 +97,109 @@ public class HUD1_script : MonoBehaviour
        }
     public void Unit_Deployment(GameObject Deployment_Case)
     {
-        //GameObject Selected_case => Case_script
-            Case_script Deployment_zone = Deployment_Case.GetComponent<Case_script>();
-        //Unit_creation
-            GameObject NewUnit= (GameObject) Instantiate (UnitPrefab);
-            Unit_script NewUnitValue =  NewUnit.GetComponent<Unit_script>();
-        //Unit Set_up
-            //GameObject
-            NewUnit.name = "UNIT_" + UnitDeployed;
-            NewUnit.transform.position = Deployment_Case.transform.position + new Vector3(0,0.2f,0);
-            //Unit values
-            NewUnitValue.Owner = UI_values.Player_turn;
-            NewUnitValue.Occupied_case = Deployment_zone;
-            NewUnitValue.Set_up_unit_values(Unit_To_Be_Deployed);
-            //Color
-            NewUnitValue.Change_Color();
-        
-        //Case update
-            Deployment_zone.OccupingUnit = NewUnitValue;
-            Deployment_zone.Occupation = Case_script.OccupationType.Unit;
-        
-        //Miscellaneous
-            UnitDeployed++;
-            UI_values.Step=UI_Manager_script.StepType.none;
-            Intel.text ="P"+UI_values.Player_turn+" created "+Unit_To_Be_Deployed;
+        if(IsThisCaseAcceptableForSuchUnit(Deployment_Case))
+        {
+            //GameObject Selected_case => Case_script
+                Case_script Deployment_zone = Deployment_Case.GetComponent<Case_script>();
+            //Unit_creation
+                GameObject NewUnit= (GameObject) Instantiate (UnitPrefab);
+                Unit_script NewUnitValue =  NewUnit.GetComponent<Unit_script>();
+            //Unit Set_up
+                //GameObject
+                NewUnit.name = "UNIT_" + UnitDeployed;
+                NewUnit.transform.position = Deployment_Case.transform.position + new Vector3(0,0.2f,0);
+                //Unit values
+                NewUnitValue.Owner = UI_values.Player_turn;
+                NewUnitValue.Occupied_case = Deployment_zone;
+                NewUnitValue.Set_up_unit_values(Unit_To_Be_Deployed);
+                //Color
+                NewUnitValue.Change_Color();
+            
+            //Case update
+                Deployment_zone.OccupingUnit = NewUnitValue;
+                Deployment_zone.Occupation = Case_script.OccupationType.Unit;
+
+            //Player Update
+                //Ressources
+                Cost_Calculation(Unit_To_Be_Deployed);
+            
+            //Miscellaneous
+                UnitDeployed++;
+                UI_values.Step=UI_Manager_script.StepType.none;
+                Intel.text ="P"+UI_values.Player_turn+" created "+Unit_To_Be_Deployed;
+        }
+        else
+        {
+            Intel.text = "Terrain not suitable for "+Unit_To_Be_Deployed.ToString();
+        }
+    }
+public bool IsThisCaseAcceptableForSuchUnit(GameObject Deployment_Case)
+    {
+        bool returnValue = true;
+        Material CaseTerrain=Deployment_Case.GetComponent<Case_script>().Terrain;
+        switch (Unit_To_Be_Deployed)
+        {
+            case Unit_script.UnitType.Jeep:
+                if (CaseTerrain.name == "Rivière")
+                {
+                    returnValue =false;
+                }
+                break;
+            case Unit_script.UnitType.Tank:
+                if (CaseTerrain.name == "Montagne")
+                {
+                    returnValue =false;
+                }
+                break;
+            case Unit_script.UnitType.Artillery:
+                if (CaseTerrain.name == "Montagne")
+                {
+                    returnValue =false;
+                }
+                break;
+        }
+        return returnValue;
+    }
+    public void Cost_Calculation(Unit_script.UnitType type)
+    {
+         switch (type)
+        {
+            case Unit_script.UnitType.Rifle:
+                PlayerToPlay.S_stock_change(-1f);
+                PlayerToPlay.E_stock_change(0f);
+                PlayerToPlay.B_stock_change(0f);
+                PlayerToPlay.M_stock_change(-1f);
+                break;
+            case Unit_script.UnitType.Bazooka:
+                PlayerToPlay.S_stock_change(-1f);
+                PlayerToPlay.E_stock_change(-1f);
+                PlayerToPlay.B_stock_change(0f);
+                PlayerToPlay.M_stock_change(-2f);
+                break;
+            case Unit_script.UnitType.Jeep:
+                PlayerToPlay.S_stock_change(-2f);
+                PlayerToPlay.E_stock_change(-1f);
+                PlayerToPlay.B_stock_change(0f);
+                PlayerToPlay.M_stock_change(-1f);
+                break;
+            case Unit_script.UnitType.Tank:
+                PlayerToPlay.S_stock_change(-3f);
+                PlayerToPlay.E_stock_change(-1f);
+                PlayerToPlay.B_stock_change(0f);
+                PlayerToPlay.M_stock_change(-2f);
+                break;
+            case Unit_script.UnitType.Artillery:
+                PlayerToPlay.S_stock_change(-2f);
+                PlayerToPlay.E_stock_change(-1f);
+                PlayerToPlay.B_stock_change(0f);
+                PlayerToPlay.M_stock_change(-2f);
+                break;
+        }
     }
     public void BT_ADD_Rifle(int a){
         //player must have enough ressources: 1 Steel and 1 Devise
-        if(float.Parse(S_S.text) > 0 && float.Parse(D_S.text) > 0)
+        if(PlayerToPlay.Energy_stock > -1   && PlayerToPlay.Steel_stock >0 
+        && PlayerToPlay.Brick_stock > -1    && PlayerToPlay.Money_stock >0)
         {
             //=>Update information message
             Intel.text="Rifle can be created, where do you want it to be deployed?";
@@ -136,10 +214,78 @@ public class HUD1_script : MonoBehaviour
         }
 
     }
-    public void BT_ADD_Bazooka(int a){}
-    public void BT_ADD_Jeep(int a){}
-    public void BT_ADD_Tank(int a){}
-    public void BT_ADD_Artillery(int a){}
+    public void BT_ADD_Bazooka(int a)
+    {
+        //player must have enough ressources: 1 Steel, 1 Energy and 2 Devise
+        if(PlayerToPlay.Energy_stock > 0   && PlayerToPlay.Steel_stock >0 
+        && PlayerToPlay.Brick_stock > -1    && PlayerToPlay.Money_stock >1)
+        {
+            //=>Update information message
+            Intel.text="Bazooka can be created, where do you want it to be deployed?";
+            UI_values.Step = UI_Manager_script.StepType.Token_creation_case;
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Bazooka;
+        }
+        else
+        {
+            //=>Update information message
+            Intel.text="You don't have enough ressources to deploy a new unit.";
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Default;
+        }
+    }
+    public void BT_ADD_Jeep(int a)
+    {
+        //player must have enough ressources: 2 Steel, 1 Energy and 1 Devise
+        if(PlayerToPlay.Energy_stock > 0   && PlayerToPlay.Steel_stock >1 
+        && PlayerToPlay.Brick_stock > -1    && PlayerToPlay.Money_stock >0)
+        {
+            //=>Update information message
+            Intel.text="Jeep can be created, where do you want it to be deployed?";
+            UI_values.Step = UI_Manager_script.StepType.Token_creation_case;
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Jeep;
+        }
+        else
+        {
+            //=>Update information message
+            Intel.text="You don't have enough ressources to deploy a new unit.";
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Default;
+        }
+    }
+    public void BT_ADD_Tank(int a)
+    {
+        //player must have enough ressources: 3 Steel, 1 Energy and 2 Devise
+        if(PlayerToPlay.Energy_stock > 0   && PlayerToPlay.Steel_stock >2 
+        && PlayerToPlay.Brick_stock > -1    && PlayerToPlay.Money_stock >1)
+        {
+            //=>Update information message
+            Intel.text="Tank can be created, where do you want it to be deployed?";
+            UI_values.Step = UI_Manager_script.StepType.Token_creation_case;
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Tank;
+        }
+        else
+        {
+            //=>Update information message
+            Intel.text="You don't have enough ressources to deploy a new unit.";
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Default;
+        }
+    }
+    public void BT_ADD_Artillery(int a)
+    {
+         //player must have enough ressources: 2 Steel, 1 Energy and 2 Devise
+        if(PlayerToPlay.Energy_stock > 0   && PlayerToPlay.Steel_stock >1 
+        && PlayerToPlay.Brick_stock > -1    && PlayerToPlay.Money_stock >1)
+        {
+            //=>Update information message
+            Intel.text="Artillery can be created, where do you want it to be deployed?";
+            UI_values.Step = UI_Manager_script.StepType.Token_creation_case;
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Artillery;
+        }
+        else
+        {
+            //=>Update information message
+            Intel.text="You don't have enough ressources to deploy a new unit.";
+            Unit_To_Be_Deployed =  Unit_script.UnitType.Default;
+        }
+    }
 
     
 }

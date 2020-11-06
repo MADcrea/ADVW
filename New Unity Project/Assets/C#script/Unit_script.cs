@@ -50,9 +50,9 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         meshRenderer.material = Color;
     }
     //Set up is called after unit instantiation
-    public void Set_up_unit_values(UnitType type)
+    public void Set_up_unit_values(UnitType type2)
     {
-        switch (type)
+        switch (type2)
         {
             case UnitType.Rifle:
                 H_limit = 1;
@@ -62,6 +62,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
                 spawn =0;
                 R_limit = 1;
                 Aim_limit =1;
+                type = type2;
                 break;
             case UnitType.Bazooka:
                 H_limit=1;
@@ -70,6 +71,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
                 spawn=1;
                 R_limit=1;
                 Aim_limit =1;
+                type = type2;
                 break;
             case UnitType.Jeep:
                 H_limit=1;
@@ -78,6 +80,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
                 spawn=1;
                 R_limit=1;
                 Aim_limit=1;
+                type = type2;
                 break;
             case UnitType.Tank:
                 H_limit=2;
@@ -86,6 +89,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
                 spawn=2;
                 R_limit=1;
                 Aim_limit=1;
+                type = type2;
                 break;
             case UnitType.Artillery:
                 H_limit=1;
@@ -94,6 +98,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
                 spawn=2;
                 R_limit=1;
                 Aim_limit=2;
+                type = type2;
                 break;
         }
     }

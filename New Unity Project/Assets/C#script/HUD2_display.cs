@@ -343,7 +343,7 @@ public class HUD2_display : MonoBehaviour
                 AL_text.text= UnitValues.A_limit.ToString();
                 MV_text.text= UnitValues.mvt.ToString();
                 ML_text.text= UnitValues.M_limit.ToString();
-                Player_text.text= UnitValues.Owner.ToString();
+                Player_text.text= "P" +UnitValues.Owner.ToString();
                 break;
             case TokenType.Building:
                 Batiment_script BuildingValues = Object.GetComponent<Batiment_script>();
