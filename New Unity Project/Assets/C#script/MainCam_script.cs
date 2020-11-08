@@ -9,7 +9,7 @@ public class MainCam_script : MonoBehaviour
     void Start()
     {
         Speed =0.5f;
-        transform.position =new Vector3 (8f*1.7f,10,-10f);
+        transform.position =new Vector3 (8f*1.7f,12,-10f);
     }
 
     // Update is called once per frame

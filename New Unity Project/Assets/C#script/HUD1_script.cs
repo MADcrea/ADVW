@@ -97,7 +97,7 @@ public class HUD1_script : MonoBehaviour
        }
     public void Unit_Deployment(GameObject Deployment_Case)
     {
-        if(IsThisCaseAcceptableForSuchUnit(Deployment_Case))
+        if(IsThisTerrainAcceptableForSuchUnit(Deployment_Case))
         {
             //GameObject Selected_case => Case_script
                 Case_script Deployment_zone = Deployment_Case.GetComponent<Case_script>();
@@ -121,7 +121,7 @@ public class HUD1_script : MonoBehaviour
 
             //Player Update
                 //Ressources
-                Cost_Calculation(Unit_To_Be_Deployed);
+                Ressources_Payment(Unit_To_Be_Deployed);
             
             //Miscellaneous
                 UnitDeployed++;
@@ -133,7 +133,7 @@ public class HUD1_script : MonoBehaviour
             Intel.text = "Terrain not suitable for "+Unit_To_Be_Deployed.ToString();
         }
     }
-public bool IsThisCaseAcceptableForSuchUnit(GameObject Deployment_Case)
+private bool IsThisTerrainAcceptableForSuchUnit(GameObject Deployment_Case)
     {
         bool returnValue = true;
         Material CaseTerrain=Deployment_Case.GetComponent<Case_script>().Terrain;
@@ -160,7 +160,7 @@ public bool IsThisCaseAcceptableForSuchUnit(GameObject Deployment_Case)
         }
         return returnValue;
     }
-    public void Cost_Calculation(Unit_script.UnitType type)
+    public void Ressources_Payment(Unit_script.UnitType type)
     {
          switch (type)
         {
