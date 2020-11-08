@@ -13,14 +13,16 @@ public class Player_script : MonoBehaviour
     public float Money_stock;
     public float Money_prod;
     public float PV;
+
+    public List<Card_script> List_cards;
     // Start is called before the first frame update
     void Start()
     {
         //Stock
-        Energy_stock=0;
-        Steel_stock =0;
-        Brick_stock =0;
-        Money_stock =0;
+        Energy_stock=10;
+        Steel_stock =10;
+        Brick_stock =10;
+        Money_stock =10;
 
         //Production
         Energy_prod= 1;
@@ -30,6 +32,8 @@ public class Player_script : MonoBehaviour
 
         //Victory points
         PV=0;
+
+        List_cards = new List<Card_script>();
 
     }
 

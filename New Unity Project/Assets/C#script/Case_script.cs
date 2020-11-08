@@ -132,6 +132,28 @@ public class Case_script : MonoBehaviour
         }
         return returnValue;
     }
+
+    public List<Case_script> GetCasesToDistance(int myDistance)
+    {
+        List <Case_script> ListCases = new List<Case_script>();
+        ListCases.Add(this);
+        for (int RemainingDistance = 1; RemainingDistance <= myDistance; RemainingDistance++)
+        {
+            List<Case_script> tempList = new List<Case_script>();
+            foreach(Case_script CurrentCase in ListCases)
+            {
+                foreach (Case_script CurrentNeighbour in CurrentCase.Cases_voisines)
+                {
+                    if (!ListCases.Contains(CurrentNeighbour) && !tempList.Contains(CurrentNeighbour))
+                    {
+                        tempList.Add(CurrentNeighbour);
+                    }
+                }
+            }
+            ListCases.AddRange(tempList);
+        }
+        return ListCases;
+    }
     private void OnMouseUp() 
     {
         //Phase 1 Step Case selection for unit
@@ -157,7 +179,7 @@ public class Case_script : MonoBehaviour
         }
         
         //Phase 2 Step Move B
-        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.Move_B)
+        if (UI_values.Phase_number ==2 && UI_values.Step == UI_Manager_script.StepType.DefineDestination)
         {
             if(Occupation==OccupationType.Free) //Case must be free
             {

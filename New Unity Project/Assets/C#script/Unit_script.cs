@@ -61,7 +61,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
                 activated =true;
                 spawn =0;
                 R_limit = 1;
-                Aim_limit =1;
+                Aim_limit =3;
                 type = type2;
                 break;
             case UnitType.Bazooka:
@@ -158,6 +158,8 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
     
     private void OnMouseUp() 
     {
+        //TODO: Remplacer par un switch/case
+    
         //Phase 2 Step Intel
         if (UI_values.Step == UI_Manager_script.StepType.Intel)
         {
@@ -167,7 +169,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         //Phase 2 Step Attack A
         // Owner Must be verified
         
-        if (UI_values.Step == UI_Manager_script.StepType.Attack_A)
+        if (UI_values.Step == UI_Manager_script.StepType.DefineAttacker)
         {
             if(ammo>0)// Ammo stock must be verified
             {
@@ -180,7 +182,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         }
 
         //Phase 2 Step Attack B
-        if (UI_values.Step == UI_Manager_script.StepType.Attack_B)
+        if (UI_values.Step == UI_Manager_script.StepType.DefineAttacked)
         {
             //Link to intel_display
             GameObject Attacker = HUD2Value.ElementA;
@@ -188,20 +190,21 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
 
             if(Attacker_values.name!=name && Attacker_values.Owner!=Owner) //Owner must be different
             {
-                if(Vector3.Distance(Attacker.transform.position,transform.position)< Attacker_values.Aim_limit *1.8)
+                List<Case_script> tmpCases = Attacker_values.Occupied_case.GetCasesToDistance((int) Attacker_values.Aim_limit);
+                if (tmpCases.Contains(this.Occupied_case))
                 {
                     HUD2Value.Attack_B_UI_update(this.gameObject);
                 }
                 else
                 {
-                    Debug.Log("Target is too far : "+Vector3.Distance(Attacker.transform.position,transform.position));
+                    Debug.Log("Target is too far!");
                 }
             }
         }
 
         //Phase 2 Step Move A
         // Owner Must be verified
-        if (UI_values.Step == UI_Manager_script.StepType.Move_A)
+        if (UI_values.Step == UI_Manager_script.StepType.DefineVoyager)
         {
             if(mvt>0f)//Mvt must be verified
             {
@@ -215,7 +218,7 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
         
         //Phase 2 Step Self-Destruct
         //Owner must be verified
-        if (UI_values.Step ==UI_Manager_script.StepType.SD_A)
+        if (UI_values.Step ==UI_Manager_script.StepType.DefineSelfDestruct)
         {
             //Link to intel_display
             string description =

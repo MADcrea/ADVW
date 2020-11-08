@@ -6,7 +6,7 @@ public class Batiment_script : MonoBehaviour
 {
     public enum BuildingType
     {
-    Production,Unlock,Attack,Reload,Defense,Bonus,
+        Production,Unlock,Attack,Reload,Defense,Bonus,
     }
     public BuildingType type;
     public float health; public float H_limit; public float ammo; public float A_limit;
@@ -20,6 +20,8 @@ public class Batiment_script : MonoBehaviour
     public GameObject UI_Man; UI_Manager_script UI_values;
     public GameObject HUD2GO; HUD2_display HUD2Value;
 
+    public ResourceManager_script ResourceManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +32,7 @@ public class Batiment_script : MonoBehaviour
         UI_values = UI_Man.GetComponent<UI_Manager_script>();
         HUD2GO =GameObject.Find("Phase II");
         HUD2Value = HUD2GO.GetComponent<HUD2_display>();
+        
     }
     // Update is called once per frame
     void Update()
@@ -81,42 +84,33 @@ public class Batiment_script : MonoBehaviour
     }
     private void OnMouseUp() 
     {
-        //Phase 2 Step Intel
-        if (UI_values.Step == UI_Manager_script.StepType.Intel)
-        {           
-            HUD2Value.Intel_UI_update(this.gameObject);
-        }
-
-        //Phase 2 Step Attack A
-        // Owner Must be verified
-        if (UI_values.Step == UI_Manager_script.StepType.Attack_A)
+        switch(UI_values.Step)
         {
-            if (type == BuildingType.Attack)
-            {
-                HUD2Value.Attack_A_UI_update(this.gameObject);
-            }
-        }
-
-        //Phase 2 Step Attack B
-        //Owner must be verified
-        //NOT a CITY must be verified
-        if (UI_values.Step == UI_Manager_script.StepType.Attack_B)
-        {
-            HUD2Value.Attack_B_UI_update(this.gameObject);
-        }
-
-        //Phase 2 Step Self-Destruct
-        //Owner must be verified
-        if (UI_values.Step == UI_Manager_script.StepType.SD_A)
-        {
-            string description =
-            type                +"\n"+"\r"+ //type
-            "Chance : 87%" + "" +"\n"+"\r"+ // proba fixe de 87% (ne pas faire 1 sur un dé à 6 faces)
-            Owner               +"\n"+"\r"+ //Owner
-            health              +"\n"+"\r"+ //health
-            Effect ;
-
-            HUD2Value.SD_UI_update("none",description,this.gameObject);
+            case UI_Manager_script.StepType.Intel:                      //Phase 2 Step Intel
+                HUD2Value.Intel_UI_update(this.gameObject);
+                break;
+            case UI_Manager_script.StepType.DefineAttacker:             //Phase 2 Step Attack A
+                if (type == BuildingType.Attack)
+                {
+                    HUD2Value.Attack_A_UI_update(this.gameObject);      //Phase 2 Step Attack B
+                }
+                break;
+            case UI_Manager_script.StepType.DefineAttacked:
+                    //Owner must be verified
+                    //NOT a CITY must be verified
+                HUD2Value.Attack_B_UI_update(this.gameObject);
+                break;
+            case UI_Manager_script.StepType.DefineSelfDestruct:
+                string description =
+                type                +"\n"+"\r"+ //type
+                "Chance : 87%" + "" +"\n"+"\r"+ // proba fixe de 87% (ne pas faire 1 sur un dé à 6 faces)
+                Owner               +"\n"+"\r"+ //Owner
+                health              +"\n"+"\r"+ //health
+                Effect ;
+                HUD2Value.SD_UI_update("none",description,this.gameObject);
+                break;
+            default:
+                break;
         }
     }
 }

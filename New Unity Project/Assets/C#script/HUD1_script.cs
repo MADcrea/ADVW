@@ -82,14 +82,18 @@ public class HUD1_script : MonoBehaviour
         M_P.text=PlayerToPlay.Brick_prod.ToString(); M_S.text=PlayerToPlay.Brick_stock.ToString();
         D_P.text=PlayerToPlay.Money_prod.ToString(); D_S.text=PlayerToPlay.Money_stock.ToString();
         
-        if(UI_values.Phase_number!= 1)
+        //Display_status.Diplay(UI_values.Phase_number);
+
+        if(UI_values.Phase_number!= 1 /*remplacer 1 avec enum Phase_number*/)
         {
+            //Display_status.Diplay(0, false, false);
             Display_status.alpha=0;
             Display_status.interactable=false;
             Display_status.blocksRaycasts=false;
         }
         else
         {
+            //Display_status.Diplay(0, false, false);
             Display_status.alpha=1;
             Display_status.interactable=true;
             Display_status.blocksRaycasts=true;
@@ -133,14 +137,14 @@ public class HUD1_script : MonoBehaviour
             Intel.text = "Terrain not suitable for "+Unit_To_Be_Deployed.ToString();
         }
     }
-private bool IsThisTerrainAcceptableForSuchUnit(GameObject Deployment_Case)
+    private bool IsThisTerrainAcceptableForSuchUnit(GameObject Deployment_Case)
     {
         bool returnValue = true;
         Material CaseTerrain=Deployment_Case.GetComponent<Case_script>().Terrain;
         switch (Unit_To_Be_Deployed)
         {
             case Unit_script.UnitType.Jeep:
-                if (CaseTerrain.name == "Rivière")
+                if (CaseTerrain.name == "Rivière")          //Pas de String, créer enum
                 {
                     returnValue =false;
                 }
@@ -198,18 +202,18 @@ private bool IsThisTerrainAcceptableForSuchUnit(GameObject Deployment_Case)
     }
     public void BT_ADD_Rifle(int a){
         //player must have enough ressources: 1 Steel and 1 Devise
-        if(PlayerToPlay.Energy_stock > -1   && PlayerToPlay.Steel_stock >0 
+        if(PlayerToPlay.Energy_stock > -1    && PlayerToPlay.Steel_stock >0 
         && PlayerToPlay.Brick_stock > -1    && PlayerToPlay.Money_stock >0)
         {
             //=>Update information message
-            Intel.text="Rifle can be created, where do you want it to be deployed?";
+            Intel.text="Rifle can be created, where do you want it to be deployed?";       // String répétée, à mettre dans une constante et à concaténer
             UI_values.Step = UI_Manager_script.StepType.Token_creation_case;
             Unit_To_Be_Deployed =  Unit_script.UnitType.Rifle;
         }
         else
         {
             //=>Update information message
-            Intel.text="You don't have enough ressources to deploy a new unit.";
+            Intel.text="You don't have enough ressources to deploy a new unit.";            // String répétée, à mettre dans une constante
             Unit_To_Be_Deployed =  Unit_script.UnitType.Default;
         }
 
@@ -285,6 +289,19 @@ private bool IsThisTerrainAcceptableForSuchUnit(GameObject Deployment_Case)
             Intel.text="You don't have enough ressources to deploy a new unit.";
             Unit_To_Be_Deployed =  Unit_script.UnitType.Default;
         }
+    }
+
+    public void BT_ADD_Building(int a)
+    {
+        Debug.Log("Building creation");
+        //Choix d'une carte de batiment, contenue dans la main
+        //  =>Affichage UI liste des cartes
+        //  =>Choix d'une carte en cliquant dessus
+        //Choix 1: batiment => désigner emplacement
+        //Choix 2: amélioration de ville
+        //Définir les ressources pour la création du batiment (partiellement ou totalement)
+        //Lorsque le batiment est totalement payé, démarrage du spawn time
+
     }
 
     

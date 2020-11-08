@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4152966897762770616}
   - component: {fileID: 3325692262883496454}
   - component: {fileID: 183815379969784618}
+  - component: {fileID: 1135166788268497225}
   m_Layer: 0
   m_Name: Batiment
   m_TagString: Untagged
@@ -92,3 +93,33 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1135166788268497225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951644257484793306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc2a888d5783a224a980e807cf082041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  health: 0
+  H_limit: 0
+  ammo: 0
+  A_limit: 0
+  reload: 0
+  R_limit: 0
+  aim: 0
+  Aim_limit: 0
+  spawn: 0
+  Position: {x: 0, y: 0, z: 0}
+  Occupied_case: {fileID: 0}
+  activated: 0
+  Effect: 
+  Owner: 0
+  UI_Man: {fileID: 0}
+  HUD2GO: {fileID: 0}
+  ResourceManager: {fileID: 0}

@@ -8,12 +8,14 @@ public class UI_Manager_script : MonoBehaviour
     public StepType Step;
     public int NUMBER_OF_PLAYERS = 2;
 
+    public List<Card_script> MainDeck;
+
     public enum StepType
     {
         //Phase 1
         Token_creation_case,
         //Phase 2
-        Intel, Attack_A, Attack_B, Attack_C, Move_A, Move_B, Move_C, SD_A, SD_B,
+        Intel, DefineAttacker, DefineAttacked, ReadyAttack, DefineVoyager, DefineDestination, ReadyMove, DefineSelfDestruct, ReadySelfDestruct,
         //Phase 3
 
         //Miscellaneous
@@ -23,8 +25,10 @@ public class UI_Manager_script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Phase_number=2;
+        Phase_number=1;
+        Player_turn = 1;
         Step=StepType.none;
+        InitMainDeck();
     }
 
     // Update is called once per frame
@@ -42,5 +46,10 @@ public class UI_Manager_script : MonoBehaviour
         {
             Player_turn = Player_turn +1;
         }
+    }
+
+    private void InitMainDeck()
+    {
+        
     }
 }

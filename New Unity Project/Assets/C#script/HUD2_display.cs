@@ -101,7 +101,7 @@ public class HUD2_display : MonoBehaviour
     {
         if(HideShowHUD(Attack_UI))
         {
-            UI_values.Step=UI_Manager_script.StepType.Attack_A;
+            UI_values.Step=UI_Manager_script.StepType.DefineAttacker;
         }
         else
         {
@@ -129,7 +129,7 @@ public class HUD2_display : MonoBehaviour
     }
     public void Attack_Perform (int a)
     {
-        if(UI_values.Step ==UI_Manager_script.StepType.Attack_C)
+        if(UI_values.Step ==UI_Manager_script.StepType.ReadyAttack)
         {
             //Random function
             float random_value =0f;
@@ -189,7 +189,7 @@ public class HUD2_display : MonoBehaviour
     {
         if(HideShowHUD(Move_UI))
         {
-            UI_values.Step=UI_Manager_script.StepType.Move_A;
+            UI_values.Step=UI_Manager_script.StepType.DefineVoyager;
         }
         else
         {
@@ -217,7 +217,7 @@ public class HUD2_display : MonoBehaviour
         ElementB =null;
     }
     public void Move_Perform (int a)
-    {if(UI_values.Step==UI_Manager_script.StepType.Move_C)
+    {if(UI_values.Step==UI_Manager_script.StepType.ReadyMove)
     {
         GameObject Voyager =ElementA;
         Unit_script Voyager_values = Voyager.GetComponent<Unit_script>();
@@ -244,7 +244,7 @@ public class HUD2_display : MonoBehaviour
     {
         if(HideShowHUD(Move_UI))
         {
-            UI_values.Step=UI_Manager_script.StepType.SD_A;
+            UI_values.Step=UI_Manager_script.StepType.DefineSelfDestruct;
         }
         else
         {
@@ -264,7 +264,7 @@ public class HUD2_display : MonoBehaviour
     }
     public void SD_Perform (int a)
     {
-        if(UI_values.Step==UI_Manager_script.StepType.SD_B)
+        if(UI_values.Step==UI_Manager_script.StepType.ReadySelfDestruct)
         {
             //Random function
             float random_value =0f;
@@ -411,12 +411,12 @@ public class HUD2_display : MonoBehaviour
         }
 
 
-        UI_values.Step =UI_Manager_script.StepType.Attack_B;
+        UI_values.Step =UI_Manager_script.StepType.DefineAttacked;
         ElementA =Object;
     }
     public void Attack_B_UI_update(GameObject Object)
     {
-        if(ElementA  != Object && UI_values.Step == UI_Manager_script.StepType.Attack_B)
+        if(ElementA  != Object && UI_values.Step == UI_Manager_script.StepType.DefineAttacked)
         {
             //Find object type and display according to
             switch(WhatKindOfObjectIsThisOne(Object))
@@ -452,7 +452,7 @@ public class HUD2_display : MonoBehaviour
                     Debug.Log("Case cannot be attacked / No function available");
                     break;
             }
-                UI_values.Step =UI_Manager_script.StepType.Attack_C;
+                UI_values.Step =UI_Manager_script.StepType.ReadyAttack;
                 ElementB = Object;
         }    
     }
@@ -468,7 +468,7 @@ public class HUD2_display : MonoBehaviour
         Voyager_ML.text = UnitValues.M_limit.ToString();
         Voyager_Player.text = UnitValues.Owner.ToString();
 
-        UI_values.Step = UI_Manager_script.StepType.Move_B;
+        UI_values.Step = UI_Manager_script.StepType.DefineDestination;
         ElementA =Object;
     }
     public void Move_B_UI_update (GameObject Object)
@@ -477,14 +477,14 @@ public class HUD2_display : MonoBehaviour
         destination_icon.material = Resources.Load<Material>("Textures/UI_"+CaseValues.Terrain.name);
         destination_text.text = CaseValues.Terrain.name;
 
-        UI_values.Step=UI_Manager_script.StepType.Move_C;
+        UI_values.Step=UI_Manager_script.StepType.ReadyMove;
         ElementB =Object;
     }
     public void SD_UI_update (string icon, string description,GameObject Object)
     {
         //Mise à jour des données à afficher
 
-        UI_values.Step =UI_Manager_script.StepType.SD_B;
+        UI_values.Step =UI_Manager_script.StepType.ReadySelfDestruct;
         ElementA =Object;
     }
 
