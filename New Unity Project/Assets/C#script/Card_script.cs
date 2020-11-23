@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class Card_script : MonoBehaviour
 {
+
+    private int[,] cardsProperties = new int [1,16] { //| COUT            |  PROD           |  SPAWN |HEALTH |  ATTACK     |SPECIAL |
+
+    { (int) CardTypeI.CityUpdate, (int) CardTypeII.Production      ,0  ,0  ,3  ,0      ,0  ,1  ,0  ,0    ,1      ,0      ,0  ,0  ,0      ,0}
+
+
+
+    };
+
     public GameObject BuildingPrefab;
     public GameObject UpdatePrefab;
     public enum CardTypeI
@@ -73,6 +82,24 @@ public class Card_script : MonoBehaviour
     }
     void ReadCardParameters(CardName Card)
     {
+
+        //TYPEI           =cardsProperties[Card,0];
+        /*TYPEII          =T2;
+        SteelCost       =SC;
+        EnergyCost      =EC;
+        BrickCost       =BC;
+        MoneyCost       =MC;
+        SteelProd       =SP;
+        EnergyProd      =EP;
+        BrickProd       =BP;
+        MoneyProd       =MP;
+        SpawnTime       =ST;
+        H_limit         =HL;
+        A_limit         =AL;
+        Aim_limit       =AimL;
+        R_limit         =RL;
+        SpecialEffect   =SE;*/
+
         /*
         CardTypeI TYPEI, CardTypeII TYPEII,
         int SC,int EC,int BC,int MC,
@@ -87,7 +114,7 @@ public class Card_script : MonoBehaviour
                 SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Production,0,0,3,0,   0,1,0,0,    1,    0,  0,0,0     ,0);
                 break;
             case CardName.Satellite_IEM :
-                SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Attack    ,0,5,1,4,   0,0,0,0,    3,    0,  0,0,0     ,1);
+                SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Attack    ,0,5,1,4,   0,0,0,0,    3,    0,  0,0,0     ,0);
                 break;
             case CardName.Economie_d_énergie:
                 SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Production,0,0,0,6,   0,2,0,0,    1,    0,  0,0,0     ,0);
