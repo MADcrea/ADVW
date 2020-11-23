@@ -17,7 +17,7 @@ public enum UnitType
 public UnitType type;
 public float health; public float H_limit; public float mvt; public float M_limit;
 public float ammo; public float A_limit; public float spawn; public float reload; public float R_limit; 
-public float aim; public float Aim_limit;
+public float Aim_limit;
 public int Owner;
 public bool activated;
 public Vector3 Position; public Case_script Occupied_case;
@@ -123,7 +123,6 @@ public GameObject HUD2GO; HUD2_display HUD2Value;
             mvt=M_limit;
             ammo=A_limit;
             reload=R_limit;
-            aim=Aim_limit;
         }
     }
 

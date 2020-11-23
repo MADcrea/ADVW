@@ -40,8 +40,14 @@ public class Batiment_script : MonoBehaviour
         
     }
      //Set up is called after unit instantiation
-     public void set_up_batiment_value()
+     public void Set_up_batiment_value(Card_script.CardName Card, Batiment_script.BuildingType Set_up_type, float Set_up_H_limit,
+     float Set_up_A_limit, float Set_up_Aim_limit, float Set_up_spawn)
     {
+        type = Set_up_type;
+        H_limit = Set_up_H_limit;
+        A_limit = Set_up_A_limit;
+        Aim_limit = Set_up_Aim_limit;
+        spawn = Set_up_spawn;
 
     }
     //Method called at building an new unit

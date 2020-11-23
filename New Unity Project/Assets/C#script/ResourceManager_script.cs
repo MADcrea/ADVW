@@ -11,34 +11,42 @@ public class ResourceManager_script : MonoBehaviour
         Brick,
         Energy
     }
-    private int money, steel, brick, energy;
+    private int costMoney, costSteel, costBrick, costEnergy;
 
     private int restMoney, restSteel, restBrick, restEnergy;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        restSteel =costSteel;
+        restEnergy = costEnergy;
+        restBrick = costBrick;
+        restMoney = costMoney;
     }
-
     // Update is called once per frame
     void Update()
     {
         
     }
-
+    public void SetUpCost(int CardCostSteel, int CardCostEnergy,int CardCostBrick,int CardCostMoney)
+    {
+        costSteel=CardCostSteel;
+        costEnergy =CardCostEnergy;
+        costBrick = CardCostBrick;
+        costMoney = CardCostMoney;
+    }
     public int getCost(ResourceType Resource)
     {
         switch(Resource)
         {
             case ResourceType.Energy:
-                return energy;
+                return costEnergy ;
             case ResourceType.Money:
-                return money;
+                return costMoney;
             case ResourceType.Brick:
-                return brick;
+                return costBrick;
             case ResourceType.Steel:
-                return steel;
+                return costSteel;
             default:
                 return -1;
         }

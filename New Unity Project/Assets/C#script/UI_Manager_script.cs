@@ -9,7 +9,6 @@ public class UI_Manager_script : MonoBehaviour
     public int NUMBER_OF_PLAYERS = 2;
 
     public List<Card_script> MainDeck;
-
     public enum StepType
     {
         //Phase 1
@@ -50,6 +49,8 @@ public class UI_Manager_script : MonoBehaviour
 
     private void InitMainDeck()
     {
-        
+        List<Card_script> MainDeck =new List<Card_script>();
+    
+
     }
 }
