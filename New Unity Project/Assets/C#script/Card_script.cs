@@ -4,24 +4,15 @@ using UnityEngine;
 
 public class Card_script : MonoBehaviour
 {
-
-    private int[,] cardsProperties = new int [1,16] { //| COUT            |  PROD           |  SPAWN |HEALTH |  ATTACK     |SPECIAL |
-
-    { (int) CardTypeI.CityUpdate, (int) CardTypeII.Production      ,0  ,0  ,3  ,0      ,0  ,1  ,0  ,0    ,1      ,0      ,0  ,0  ,0      ,0}
-
-
-
-    };
-
     public GameObject BuildingPrefab;
     public GameObject UpdatePrefab;
     public enum CardTypeI
-    {CityUpdate,Building,}
+    {TEST,CityUpdate,Building,}
     public enum CardTypeII
-    {Production,Unlock,Attack,Reload,Defense,Bonus,}
+    {TEST,Production,Unlock,Attack,Reload,Defense,Bonus,}
     public enum CardName 
     {
-    Incinérateur,Satellite_IEM,Economie_d_énergie,Transports_collectifs_gratuits,Ecole_de_guerre,Scierie,
+    TEST,Incinérateur,Satellite_IEM,Economie_d_énergie,Transports_collectifs_gratuits,Ecole_de_guerre,Scierie,
     Programme_de_santé,Exposition_universelle,Déforestation,Poste_avancé,Acierie,Cimenterie,Serveurs_informatique,
     Pyramide,Barrage_hydro_elec,Eolienne,Carrière,Casino,Ligne_de_métro,Aquaponie,Marché,Gratte_ciel,Ecole_de_pilotage,
     Centre_de_recherche,Fabrique_d_explosifs,Service_secret,Puits_de_pétrole,Centre_spatial,Centrale_nucleaire,
@@ -29,239 +20,119 @@ public class Card_script : MonoBehaviour
     Aéroport_commercial,Centrale_fusion_froide,Labo_secret,Port_spatial,Mémorial,Loi_sur_les_emballages,
     Loi_de_libre_échange,Zaibatsu_conglomérat,Base_aérienne,Base_militaire,Colossius,Guardian,Hopital_de_campagne,
     }
-    public CardName Card;
-    public CardTypeI TYPEI;
-    public CardTypeII TYPEII;
-    public int SteelCost;
-    public int EnergyCost;
-    public int BrickCost;
-    public int MoneyCost;
-    public int SteelProd;
-    public int EnergyProd;
-    public int BrickProd;
-    public int MoneyProd;
-    public int SpawnTime;
-    public int H_limit;
-    public int A_limit;
-    public int Aim_limit;
-    public int R_limit;
-    public int SpecialEffect;
+
+    private int[,] cardsProperties = new int [,] { 
+    //#card|TYPE1|TYPE2|        COUT      |     PROD          | SPAWN | HEALTH |  ATTACK   |SPECIAL |
+    { 0,    0,      0,      0  ,0  ,0  ,0      ,0  ,0  ,0  ,0    ,0      ,0      ,0  ,0  ,0   ,0},//TEST
+    { 1,    1,      1,      0  ,0  ,3  ,0      ,0  ,1  ,0  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 2,    1,      3,      0  ,5  ,1  ,4      ,0  ,0  ,0  ,0    ,3      ,-1     ,1  ,50 ,1   ,0},
+    { 3,    1,      1,      0  ,0  ,0  ,6      ,0  ,2  ,0  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 4,    1,      1,      0  ,0  ,0  ,3      ,0  ,1  ,0  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 5,    2,      2,      1  ,0  ,3  ,0      ,0  ,0  ,0  ,0    ,2      ,1      ,0  ,0  ,0   ,0},
+    { 6,    2,      1,      1  ,1  ,2  ,0      ,0  ,0  ,2  ,0    ,1      ,2      ,0  ,0  ,0   ,0},
+    { 7,    1,      5,      0  ,0  ,1  ,5      ,0  ,0  ,0  ,0    ,3      ,-1     ,0  ,0  ,0   ,0},
+    { 8,    2,      6,      0  ,0  ,-1 ,1      ,0  ,0  ,0  ,0    ,0      ,1      ,0  ,0  ,0   ,0},
+    { 9,    2,      6,      0  ,-1 ,0  ,0      ,0  ,0  ,0  ,0    ,0      ,1      ,0  ,0  ,0   ,0},
+    { 10,   2,      3,      1  ,0  ,1  ,0      ,0  ,0  ,0  ,0    ,1      ,2      ,1  ,50 ,1   ,0},
+    { 11,   2,      1,      0  ,0  ,2  ,0      ,1  ,0  ,0  ,0    ,1      ,1      ,0  ,0  ,0   ,0},
+    { 12,   2,      1,      0  ,0  ,2  ,0      ,0  ,0  ,0  ,1    ,1      ,1      ,0  ,0  ,0   ,0},
+    { 13,   2,      1,      0  ,0  ,2  ,0      ,0  ,0  ,0  ,1    ,1      ,1      ,0  ,0  ,0   ,0},
+    { 14,   2,      1,      0  ,0  ,2  ,0      ,0  ,0  ,1  ,0    ,1      ,1      ,0  ,0  ,0   ,0},
+    { 15,   2,      1,      0  ,0  ,2  ,0      ,0  ,1  ,0  ,0    ,1      ,1      ,0  ,0  ,0   ,0},
+    { 16,   2,      1,      0  ,0  ,2  ,0      ,0  ,1  ,0  ,0    ,1      ,1      ,0  ,0  ,0   ,0},
+    { 17,   2,      1,      0  ,0  ,2  ,0      ,1  ,0  ,0  ,0    ,1      ,1      ,0  ,0  ,0   ,0},
+    { 18,   1,      1,      0  ,0  ,0  ,3      ,0  ,0  ,0  ,1    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 19,   1,      1,      0  ,0  ,3  ,0      ,0  ,0  ,0  ,1    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 20,   1,      1,      0  ,0  ,3  ,0      ,0  ,1  ,0  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 21,   1,      1,      0  ,0  ,3  ,0      ,0  ,0  ,0  ,1    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 22,   1,      1,      0  ,0  ,3  ,0      ,0  ,0  ,0  ,1    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 23,   2,      2,      1  ,0  ,3  ,0      ,0  ,0  ,0  ,0    ,2      ,1      ,0  ,0  ,0   ,0},
+    { 24,   2,      2,      1  ,0  ,3  ,0      ,0  ,0  ,0  ,0    ,2      ,1      ,0  ,0  ,0   ,0},
+    { 25,   2,      2,      1  ,0  ,3  ,0      ,0  ,0  ,0  ,0    ,2      ,1      ,0  ,0  ,0   ,0},
+    { 26,   2,      2,      1  ,0  ,3  ,0      ,0  ,0  ,0  ,0    ,2      ,1      ,0  ,0  ,0   ,0},
+    { 27,   2,      1,      2  ,0  ,1  ,1      ,0  ,2  ,0  ,0    ,1      ,2      ,0  ,0  ,0   ,0},
+    { 28,   2,      1,      2  ,0  ,2  ,0      ,1  ,0  ,1  ,0    ,1      ,2      ,0  ,0  ,0   ,0},
+    { 29,   2,      1,      1  ,0  ,3  ,0      ,0  ,2  ,0  ,0    ,1      ,2      ,0  ,0  ,0   ,0},
+    { 30,   2,      1,      2  ,0  ,2  ,0      ,0  ,2  ,0  ,0    ,1      ,2      ,0  ,0  ,0   ,0},
+    { 31,   2,      5,      3  ,0  ,2  ,0      ,0  ,0  ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
+    { 32,   2,      5,      2  ,1  ,2  ,0      ,0  ,0  ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
+    { 33,   1,      1,      2  ,0  ,3  ,1      ,1  ,0  ,1  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 34,   1,      1,      3  ,0  ,1  ,2      ,1  ,0  ,0  ,1    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 35,   1,      1,      0  ,0  ,0  ,6      ,0  ,0  ,0  ,2    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 36,   2,      1,      1  ,0  ,3  ,2      ,0  ,0  ,0  ,3    ,1      ,3      ,0  ,0  ,0   ,0},
+    { 37,   2,      1,      4  ,0  ,2  ,0      ,0  ,3  ,0  ,0    ,1      ,3      ,0  ,0  ,0   ,0},
+    { 38,   2,      2,      2  ,0  ,6  ,0      ,0  ,0  ,0  ,0    ,2      ,2      ,0  ,0  ,0   ,0},
+    { 39,   2,      1,      3  ,3  ,1  ,1      ,2  ,0  ,2  ,0    ,1      ,4      ,0  ,0  ,0   ,0},
+    { 40,   1,      1,      0  ,0  ,0  ,9      ,0  ,0  ,3  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 41,   1,      1,      3  ,3  ,0  ,3      ,0  ,0  ,2  ,1    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 42,   1,      1,      0  ,0  ,0  ,9      ,1  ,1  ,1  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 43,   1,      1,      0  ,0  ,0  ,9      ,1  ,0  ,2  ,0    ,1      ,-1     ,0  ,0  ,0   ,0},
+    { 44,   2,      3,      2  ,0  ,8  ,0      ,0  ,0  ,0  ,0    ,3      ,2      ,1  ,50 ,1   ,0},
+    { 45,   2,      5,      2  ,0  ,8  ,0      ,0  ,0  ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
+    { 46,   2,      5,      0  ,0  ,5  ,5      ,0  ,-5 ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
+    { 47,   2,      5,      5  ,0  ,0  ,5      ,0  ,-5 ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
+    { 48,   2,      5,      1  ,0  ,1  ,8      ,0  ,0  ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
+    //#card|TYPE1|TYPE2|        COUT      |     PROD          | SPAWN | HEALTH |  ATTACK   |SPECIAL |
+    };  
+    private CardName Card;
+    private CardTypeI TYPEI;
+    private CardTypeII TYPEII;
+    private int SteelCost;
+    private int EnergyCost;
+    private int BrickCost;
+    private int MoneyCost;
+    private int SteelProd;
+    private int EnergyProd;
+    private int BrickProd;
+    private int MoneyProd;
+    private int SpawnTime;
+    private int H_limit;
+    private int A_limit;
+    private int Aim_limit;
+    private int R_limit;
+    private int SpecialEffect;
     // Start is called before the first frame update
     void Start()
     {
-        
+        //int rand = Random.Range(0,49);
+        int rand =5;
+        Debug.Log(rand);
+        SetCardParameters(rand);
     }
-
     // Update is called once per frame
     void Update()
     {
         
     }
-    void SetCardParameters (CardTypeI T1, CardTypeII T2,
-                            int SC,int EC,int BC,int MC,
-                            int SP,int EP,int BP,int MP,
-                            int ST,int HL,int AL,int AimL,
-                            int RL,int SE)
+    void SetCardParameters (int Cardnumber)
     {
-    TYPEI           =T1;
-    TYPEII          =T2;
-    SteelCost       =SC;
-    EnergyCost      =EC;
-    BrickCost       =BC;
-    MoneyCost       =MC;
-    SteelProd       =SP;
-    EnergyProd      =EP;
-    BrickProd       =BP;
-    MoneyProd       =MP;
-    SpawnTime       =ST;
-    H_limit         =HL;
-    A_limit         =AL;
-    Aim_limit       =AimL;
-    R_limit         =RL;
-    SpecialEffect   =SE;
-    }
-    void ReadCardParameters(CardName Card)
-    {
-
-        //TYPEI           =cardsProperties[Card,0];
-        /*TYPEII          =T2;
-        SteelCost       =SC;
-        EnergyCost      =EC;
-        BrickCost       =BC;
-        MoneyCost       =MC;
-        SteelProd       =SP;
-        EnergyProd      =EP;
-        BrickProd       =BP;
-        MoneyProd       =MP;
-        SpawnTime       =ST;
-        H_limit         =HL;
-        A_limit         =AL;
-        Aim_limit       =AimL;
-        R_limit         =RL;
-        SpecialEffect   =SE;*/
-
-        /*
-        CardTypeI TYPEI, CardTypeII TYPEII,
-        int SC,int EC,int BC,int MC,
-        int SP,int EP,int BP,int MP,
-        int ST,int HL,int AL,int AimL,
-        int RL,int SE
-        */
-        switch(Card)
-        {
-            case CardName.Incinérateur:
-                                                                            //COUT      PROD     SPAWN HEALTH ATTACK SPECIAL
-                SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Production,0,0,3,0,   0,1,0,0,    1,    0,  0,0,0     ,0);
-                break;
-            case CardName.Satellite_IEM :
-                SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Attack    ,0,5,1,4,   0,0,0,0,    3,    0,  0,0,0     ,0);
-                break;
-            case CardName.Economie_d_énergie:
-                SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Production,0,0,0,6,   0,2,0,0,    1,    0,  0,0,0     ,0);
-                break;
-            case CardName.Transports_collectifs_gratuits:
-                SetCardParameters(CardTypeI.CityUpdate,CardTypeII.Production,0,0,0,3,   0,1,0,0,    1,    0,  0,0,0     ,0);
-                break;
-            case CardName.Ecole_de_guerre:
-                SetCardParameters(CardTypeI.Building,CardTypeII.Unlock      ,1,0,3,0,   0,0,0,0,    2,    1,  0,0,0     ,2);
-                break;
-            case CardName.Scierie:
-                SetCardParameters(CardTypeI.Building,CardTypeII.Production  ,1,1,2,0,   0,0,2,0,    1,    2,  0,0,0     ,0);
-                break;
-            case CardName.Programme_de_santé:
-                SetCardParameters(0,0,1,5);
-                break;
-            case CardName.Exposition_universelle:
-                SetCardParameters(0,0,0,1);
-                break;
-            case CardName.Déforestation:
-                SetCardParameters(0,1,0,0);
-                break;
-            case CardName.Poste_avancé:
-                SetCardParameters(1,0,1,0);
-                break;
-            case CardName.Acierie:
-                SetCardParameters(0,0,2,0);
-                break;
-            case CardName.Cimenterie:
-                SetCardParameters(0,0,2,0);
-                break;
-            case CardName.Serveurs_informatique:
-                SetCardParameters(0,0,2,0);
-                break;
-            case CardName.Pyramide:
-                SetCardParameters(0,0,2,0);
-                break;
-            case CardName.Barrage_hydro_elec:
-                SetCardParameters(0,0,2,0);
-                break;
-            case CardName.Eolienne:
-                SetCardParameters(0,0,2,0);
-                break;
-            case CardName.Carrière:
-                SetCardParameters(0,0,2,0);
-                break;
-            case CardName.Casino:
-                SetCardParameters(0,0,0,3);
-                break;
-            case CardName.Ligne_de_métro:
-                SetCardParameters(0,0,3,0);
-                break;
-            case CardName.Aquaponie:
-                SetCardParameters(0,0,3,0);
-                break;
-            case CardName.Marché:
-                SetCardParameters(0,0,3,0);
-                break;
-            case CardName.Gratte_ciel:
-                SetCardParameters(0,0,3,0);
-                break;
-            case CardName.Ecole_de_pilotage:
-                SetCardParameters(1,0,3,0);
-                break;
-            case CardName.Centre_de_recherche:
-                SetCardParameters(1,0,3,0);
-                break;
-            case CardName.Fabrique_d_explosifs:
-                SetCardParameters(1,0,3,0);
-                break;
-            case CardName.Service_secret:
-                SetCardParameters(1,0,3,0);
-                break;
-            case CardName.Puits_de_pétrole:
-                SetCardParameters(2,0,1,1);
-                break;
-            case CardName.Centre_spatial:
-                SetCardParameters(2,0,2,0);
-                break;
-            case CardName.Centrale_nucleaire:
-                SetCardParameters(1,0,3,0);
-                break;
-            case CardName.Plateforme_pétrolière:
-                SetCardParameters(2,0,2,0);
-                break;
-            case CardName.Tour_de_contrôle:
-                SetCardParameters(3,0,2,0);
-                break;
-            case CardName.Bouclier_anti_missile:
-                SetCardParameters(2,1,2,0);
-                break;
-            case CardName.Déchèterie:
-                SetCardParameters(2,0,3,1);
-                break;
-            case CardName.Bras_robot:
-                SetCardParameters(3,0,1,2);
-                break;
-            case CardName.Marchés_publiques:
-                SetCardParameters(0,0,0,6);
-                break;
-            case CardName.Aéroport_commercial:
-                SetCardParameters(1,0,3,2);
-                break;
-            case CardName.Centrale_fusion_froide:
-                SetCardParameters(4,0,2,0);
-                break;
-            case CardName.Labo_secret:
-                SetCardParameters(2,0,6,0);
-                break;
-            case CardName.Port_spatial:
-                SetCardParameters(3,3,1,1);
-                break;
-            case CardName.Mémorial:
-                SetCardParameters(0,0,0,9);
-                break;
-            case CardName.Loi_sur_les_emballages:
-                SetCardParameters(3,3,0,3);
-                break;
-            case CardName.Loi_de_libre_échange:
-                SetCardParameters(0,0,0,9);
-                break;
-            case CardName.Zaibatsu_conglomérat:
-                SetCardParameters(0,0,0,9);
-                break;
-            case CardName.Base_aérienne:
-                SetCardParameters(2,0,8,0);
-                break;
-            case CardName.Base_militaire:
-                SetCardParameters(2,0,8,0);
-                break;
-            case CardName.Colossius:
-                SetCardParameters(0,0,5,5);
-                break;
-            case CardName.Guardian:
-                SetCardParameters(5,0,0,5);
-                break;
-            case CardName.Hopital_de_campagne:
-                SetCardParameters(1,0,1,8);
-                break;
-        
-        }
+    CardName Card       = (CardName) Cardnumber; 
+    CardTypeI TYPEI     = (CardTypeI) cardsProperties[Cardnumber,1];
+    CardTypeII TYPEII   = (CardTypeII) cardsProperties[Cardnumber,2];
+    SteelCost           = cardsProperties[Cardnumber,3];
+    EnergyCost          = cardsProperties[Cardnumber,4];
+    BrickCost           = cardsProperties[Cardnumber,5];
+    MoneyCost           = cardsProperties[Cardnumber,6];
+    SteelProd           = cardsProperties[Cardnumber,7];
+    EnergyProd          = cardsProperties[Cardnumber,8];
+    BrickProd           = cardsProperties[Cardnumber,9];
+    MoneyProd           = cardsProperties[Cardnumber,10];
+    SpawnTime           = cardsProperties[Cardnumber,11];
+    H_limit             = cardsProperties[Cardnumber,12];
+    A_limit             = cardsProperties[Cardnumber,13];
+    Aim_limit           = cardsProperties[Cardnumber,14];
+    R_limit             = cardsProperties[Cardnumber,15];
+    SpecialEffect       = cardsProperties[Cardnumber,16];
+    Debug.Log(Card);
+    Debug.Log(TYPEI);
+    Debug.Log(TYPEII);
+    Debug.Log(SteelCost);
     }
     public void CardChildGOCreation()
     {
-        switch(WhatTypeIsThisCard(Card))
+        /*switch(WhatTypeIsThisCard(Card))
         {
-            case CardType.Building:
+            case CardTypeI.Building:
                 //Instantiates a BUILDING Prefab with NO script in it.
                 GameObject BuildingGO= (GameObject) Instantiate (BuildingPrefab);
                 //Add ResourceManager to new created CardChildGO and set-it up
@@ -269,167 +140,20 @@ public class Card_script : MonoBehaviour
                 //Add Building parameters to new created CardChildGO and set-it up
                 SetUpBuilding(Card,BuildingGO);
                 break;
-            case CardType.Update:
+            case CardTypeI.CityUpdate:
                 //Instantiates an UPDATE Prefab with NO script in it.
                 GameObject UpdateGO= (GameObject) Instantiate (UpdatePrefab);
                 //Add ResourceManager to new created CardChildGO and set-it up
                 ResourceManagerCreation(Card,UpdateGO);
                 break;
-        }
+        }*/
     }
    
     public void ResourceManagerCreation(CardName Card,GameObject CardChildGO)
     {
         //instantiates ResourceManager_script
         ResourceManager_script ResourceManager = CardChildGO.AddComponent<ResourceManager_script>();
-        switch (Card)
-        {
-            //SetUpCost(Steel,Energy,Brick,Money)
-            case CardName.Incinérateur:
-                ResourceManager.SetUpCost(0,0,3,0);
-                break;
-            case CardName.Satellite_IEM :
-                ResourceManager.SetUpCost(0,5,1,4);
-                break;
-            case CardName.Economie_d_énergie:
-                ResourceManager.SetUpCost(0,0,0,6);
-                break;
-            case CardName.Transports_collectifs_gratuits:
-                ResourceManager.SetUpCost(0,0,0,3);
-                break;
-            case CardName.Ecole_de_guerre:
-                ResourceManager.SetUpCost(1,0,3,0);
-                break;
-            case CardName.Scierie:
-                ResourceManager.SetUpCost(1,1,2,0);
-                break;
-            case CardName.Programme_de_santé:
-                ResourceManager.SetUpCost(0,0,1,5);
-                break;
-            case CardName.Exposition_universelle:
-                ResourceManager.SetUpCost(0,0,0,1);
-                break;
-            case CardName.Déforestation:
-                ResourceManager.SetUpCost(0,1,0,0);
-                break;
-            case CardName.Poste_avancé:
-                ResourceManager.SetUpCost(1,0,1,0);
-                break;
-            case CardName.Acierie:
-                ResourceManager.SetUpCost(0,0,2,0);
-                break;
-            case CardName.Cimenterie:
-                ResourceManager.SetUpCost(0,0,2,0);
-                break;
-            case CardName.Serveurs_informatique:
-                ResourceManager.SetUpCost(0,0,2,0);
-                break;
-            case CardName.Pyramide:
-                ResourceManager.SetUpCost(0,0,2,0);
-                break;
-            case CardName.Barrage_hydro_elec:
-                ResourceManager.SetUpCost(0,0,2,0);
-                break;
-            case CardName.Eolienne:
-                ResourceManager.SetUpCost(0,0,2,0);
-                break;
-            case CardName.Carrière:
-                ResourceManager.SetUpCost(0,0,2,0);
-                break;
-            case CardName.Casino:
-                ResourceManager.SetUpCost(0,0,0,3);
-                break;
-            case CardName.Ligne_de_métro:
-                ResourceManager.SetUpCost(0,0,3,0);
-                break;
-            case CardName.Aquaponie:
-                ResourceManager.SetUpCost(0,0,3,0);
-                break;
-            case CardName.Marché:
-                ResourceManager.SetUpCost(0,0,3,0);
-                break;
-            case CardName.Gratte_ciel:
-                ResourceManager.SetUpCost(0,0,3,0);
-                break;
-            case CardName.Ecole_de_pilotage:
-                ResourceManager.SetUpCost(1,0,3,0);
-                break;
-            case CardName.Centre_de_recherche:
-                ResourceManager.SetUpCost(1,0,3,0);
-                break;
-            case CardName.Fabrique_d_explosifs:
-                ResourceManager.SetUpCost(1,0,3,0);
-                break;
-            case CardName.Service_secret:
-                ResourceManager.SetUpCost(1,0,3,0);
-                break;
-            case CardName.Puits_de_pétrole:
-                ResourceManager.SetUpCost(2,0,1,1);
-                break;
-            case CardName.Centre_spatial:
-                ResourceManager.SetUpCost(2,0,2,0);
-                break;
-            case CardName.Centrale_nucleaire:
-                ResourceManager.SetUpCost(1,0,3,0);
-                break;
-            case CardName.Plateforme_pétrolière:
-                ResourceManager.SetUpCost(2,0,2,0);
-                break;
-            case CardName.Tour_de_contrôle:
-                ResourceManager.SetUpCost(3,0,2,0);
-                break;
-            case CardName.Bouclier_anti_missile:
-                ResourceManager.SetUpCost(2,1,2,0);
-                break;
-            case CardName.Déchèterie:
-                ResourceManager.SetUpCost(2,0,3,1);
-                break;
-            case CardName.Bras_robot:
-                ResourceManager.SetUpCost(3,0,1,2);
-                break;
-            case CardName.Marchés_publiques:
-                ResourceManager.SetUpCost(0,0,0,6);
-                break;
-            case CardName.Aéroport_commercial:
-                ResourceManager.SetUpCost(1,0,3,2);
-                break;
-            case CardName.Centrale_fusion_froide:
-                ResourceManager.SetUpCost(4,0,2,0);
-                break;
-            case CardName.Labo_secret:
-                ResourceManager.SetUpCost(2,0,6,0);
-                break;
-            case CardName.Port_spatial:
-                ResourceManager.SetUpCost(3,3,1,1);
-                break;
-            case CardName.Mémorial:
-                ResourceManager.SetUpCost(0,0,0,9);
-                break;
-            case CardName.Loi_sur_les_emballages:
-                ResourceManager.SetUpCost(3,3,0,3);
-                break;
-            case CardName.Loi_de_libre_échange:
-                ResourceManager.SetUpCost(0,0,0,9);
-                break;
-            case CardName.Zaibatsu_conglomérat:
-                ResourceManager.SetUpCost(0,0,0,9);
-                break;
-            case CardName.Base_aérienne:
-                ResourceManager.SetUpCost(2,0,8,0);
-                break;
-            case CardName.Base_militaire:
-                ResourceManager.SetUpCost(2,0,8,0);
-                break;
-            case CardName.Colossius:
-                ResourceManager.SetUpCost(0,0,5,5);
-                break;
-            case CardName.Guardian:
-                ResourceManager.SetUpCost(5,0,0,5);
-                break;
-            case CardName.Hopital_de_campagne:
-                ResourceManager.SetUpCost(1,0,1,8);
-                break;
-        }
+        
     }
     public void SetUpBuilding(CardName Card,GameObject CardChildGO)
     //instantiates Batiment_script
@@ -440,102 +164,7 @@ public class Card_script : MonoBehaviour
         Set_up_batiment_value(
         Card_script.CardName Card, Batiment_script.BuildingType Set_up_type, float Set_up_H_limit,
         float Set_up_A_limit, float Set_up_Aim_limit, float Set_up_spawn)*/
-        switch (Card)
-        {
-            case CardName.Ecole_de_guerre:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Unlock,1,0,0,2);
-                break;
-            case CardName.Scierie:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,2,0,0,1);
-                break;
-            case CardName.Exposition_universelle:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Bonus,1,0,0,0);
-                break;
-            case CardName.Déforestation:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Bonus,1,0,0,0);
-                break;
-            case CardName.Poste_avancé:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Attack,2,0,0,1);
-                break;
-            case CardName.Acierie:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,1,0,0,1);
-                break;
-            case CardName.Cimenterie:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,1,0,0,1);
-                break;
-            case CardName.Serveurs_informatique:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,1,0,0,1);
-                break;
-            case CardName.Pyramide:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,1,0,0,1);
-                break;
-            case CardName.Barrage_hydro_elec:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,1,0,0,1);
-                break;
-            case CardName.Eolienne:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,1,0,0,1);
-                break;
-            case CardName.Carrière:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,1,0,0,1);
-                break;
-            case CardName.Ecole_de_pilotage:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Unlock,1,0,0,2);
-                break;
-            case CardName.Centre_de_recherche:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Unlock,1,0,0,2);
-                break;
-            case CardName.Fabrique_d_explosifs:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Unlock,1,0,0,2);
-                break;
-            case CardName.Service_secret:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Unlock,1,0,0,2);
-                break;
-            case CardName.Puits_de_pétrole:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,2,0,0,1);
-                break;
-            case CardName.Centre_spatial:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,2,0,0,1);
-                break;
-            case CardName.Centrale_nucleaire:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,2,0,0,1);
-                break;
-            case CardName.Plateforme_pétrolière:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,2,0,0,1);
-                break;
-            case CardName.Tour_de_contrôle:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Defense,2,0,0,3);
-                break;
-            case CardName.Bouclier_anti_missile:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Defense,2,0,0,3);
-                break;
-            case CardName.Aéroport_commercial:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,3,0,0,1);
-                break;
-            case CardName.Centrale_fusion_froide:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,3,0,0,1);
-                break;
-            case CardName.Labo_secret:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Unlock,2,0,0,2);
-                break;
-            case CardName.Port_spatial:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Production,4,0,0,1);
-                break;
-            case CardName.Base_aérienne:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Attack,2,1,100,3);
-                break;
-            case CardName.Base_militaire:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Defense,2,0,0,3);
-                break;
-            case CardName.Colossius:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Defense,2,0,0,3);
-                break;
-            case CardName.Guardian:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Defense,2,0,0,3);
-                break;
-            case CardName.Hopital_de_campagne:
-                BuildingStat.Set_up_batiment_value(Card,Batiment_script.BuildingType.Defense,2,0,0,3);
-                break;
-        }
+        
        
 
     }

@@ -71,7 +71,7 @@ public class Plateau_script : MonoBehaviour
                 }
                 GameObject CaseObject= (GameObject) Instantiate (CasePrefab);
                 //Case_script Case =  CaseObject.AddComponent<Case_script>();
-                Case_script Case =  CaseObject.GetComponent<Case_script>();
+                Case_script Case =  CaseObject.AddComponent<Case_script>();
                 Case.id = numberOfCases;
                 /* CaseObject.transform.parent = transform; */
                 CaseObject.name = "Case n°"+numberOfCases;

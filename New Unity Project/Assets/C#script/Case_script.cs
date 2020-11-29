@@ -16,8 +16,8 @@ public class Case_script : MonoBehaviour
     {
         Unit,
         Building,
-        Free
-    }
+        Free,
+    };
 
     public int id;
     public OccupationType Occupation;
