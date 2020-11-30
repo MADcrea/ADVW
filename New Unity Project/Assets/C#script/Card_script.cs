@@ -9,16 +9,16 @@ public class Card_script : MonoBehaviour
     public enum CardTypeI
     {TEST,CityUpdate,Building,}
     public enum CardTypeII
-    {TEST,Production,Unlock,Attack,Reload,Defense,Bonus,}
+    {TEST,Production,Unlock,Attack,Reload,Defense,Bonus}
     public enum CardName 
     {
-    TEST,Incinérateur,Satellite_IEM,Economie_d_énergie,Transports_collectifs_gratuits,Ecole_de_guerre,Scierie,
-    Programme_de_santé,Exposition_universelle,Déforestation,Poste_avancé,Acierie,Cimenterie,Serveurs_informatique,
-    Pyramide,Barrage_hydro_elec,Eolienne,Carrière,Casino,Ligne_de_métro,Aquaponie,Marché,Gratte_ciel,Ecole_de_pilotage,
-    Centre_de_recherche,Fabrique_d_explosifs,Service_secret,Puits_de_pétrole,Centre_spatial,Centrale_nucleaire,
-    Plateforme_pétrolière,Tour_de_contrôle,Bouclier_anti_missile,Déchèterie,Bras_robot,Marchés_publiques,
-    Aéroport_commercial,Centrale_fusion_froide,Labo_secret,Port_spatial,Mémorial,Loi_sur_les_emballages,
-    Loi_de_libre_échange,Zaibatsu_conglomérat,Base_aérienne,Base_militaire,Colossius,Guardian,Hopital_de_campagne,
+    TEST,Incinerateur,Satellite_IEM,Economie_d_energie,Transports_collectifs_gratuits,Ecole_de_guerre,Scierie,
+    Programme_de_sante,Exposition_universelle,Deforestation,Poste_avance,Acierie,Cimenterie,Serveurs_informatique,
+    Pyramide,Barrage_hydro_elec,Eolienne,Carriere,Casino,Ligne_de_metro,Aquaponie,Marche,Gratte_ciel,Ecole_de_pilotage,
+    Centre_de_recherche,Fabrique_d_explosifs,Service_secret,Puits_de_petrole,Centre_spatial,Centrale_nucleaire,
+    Plateforme_petroliere,Tour_de_controle,Bouclier_anti_missile,Decheterie,Bras_robot,Marches_publiques,
+    Aeroport_commercial,Centrale_fusion_froide,Labo_secret,Port_spatial,Memorial,Loi_sur_les_emballages,
+    Loi_de_libre_echange,Zaibatsu_conglomerat,Base_aerienne,Base_militaire,Colossius,Guardian,Hopital_de_campagne,
     }
 
     private int[,] cardsProperties = new int [,] { 
@@ -73,10 +73,63 @@ public class Card_script : MonoBehaviour
     { 47,   2,      5,      5  ,0  ,0  ,5      ,0  ,-5 ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
     { 48,   2,      5,      1  ,0  ,1  ,8      ,0  ,0  ,0  ,0    ,3      ,2      ,0  ,0  ,0   ,0},
     //#card|TYPE1|TYPE2|        COUT      |     PROD          | SPAWN | HEALTH |  ATTACK   |SPECIAL |
-    };  
-    private CardName Card;
-    private CardTypeI TYPEI;
-    private CardTypeII TYPEII;
+    };
+    private string [] CardDescriptions=new string[]
+    {
+        "TEST",
+        "La ville augmente la production 1 unité de pétrole",
+        "Empeche une ville ennemie de produire ses ressources pendant 1 tour. Ne fonctionne qu'une fois",
+        "La ville augmente la poduction de 2 unité de pétrole",
+        "La ville augmente la production de 1 unité de pétrole",
+        "Permet de constuire une base militaire",
+        "Augmente la production de 2 unités de matériaux.",
+        "Les fusiliers soignées par la ville reçoive 1 santé supplémentaire",
+        "Produit 1 unité de Matériaux et 1 PV à la construction. Ne produit plus rien ensuite.",
+        "Produit 5 unité de pétrole à la construction. Ne produit plus rien ensuite.",
+        "Sans effet",
+        "Augmente la production 1 unité d'acier",
+        "Augmente la production 1 unité de devise",
+        "Augmente la production 1 unité de devise",
+        "Augmente la production 1 unité de Matériaux",
+        "Augmente la production 1 unité de pétrole",
+        "Augmente la production 1 unité de pétrole",
+        "Augmente la production 1 unité d'acier",
+        "La ville augmente la production 1 unité de devise",
+        "La ville augmente la production 1 unité de devise",
+        "La ville augmente la production 1 unité de pétrole",
+        "La ville augmente la production 1 unité de devise",
+        "La ville augmente la production 1 unité de devise",
+        "Permet de construire une base aérienne",
+        "Permet d'améliorer les unités Jeep",
+        "Permet d'améliorer les unités Bazooka",
+        "Permet d'améliorer les unités fusiliers",
+        "Augmente la production 2 unités de pétrole",
+        "Augmente la production 1 unité d'acier et 1 unité de Matériaux",
+        "Augmente la production 2 unité de pétrole",
+        "Augmente la production 2 unité de pétrole",
+        "Protège les unités amies située à 2 cases d'une attaque aérienne",
+        "Les unités amies adjacentes à la ville ne peuvent pas être attaquées par un mortier.",
+        "La ville augmente la production 1 unité d'acier et 1 unité de matériaux",
+        "La ville augmente la production 1 unité d'acier et 1 unité de devise",
+        "La ville augmente la production 2 unité de devise",
+        "Augmente la production 3 unité de devise",
+        "Augmente la production 3 unité de pétrole",
+        "Permet d'améliorer les unités Char et Mortier",
+        "Augmente la production de 2 unités d'acier et 2 unités de matériaux",
+        "La ville augmente la production 3 unité de Matériaux",
+        "La ville augmente la production 2 unité de Matériaux et 1 unité de devise à chaque phase de récolte",
+        "La ville augmente la production 1 unité d'acier, 1 unité de pétrole et 1 unité de Matériaux",
+        "La ville augmente la production d'1 unité d'acier et 2 unité de matériaux",
+        "Permet de lancer une attaque aérienne sur une unité ennemies (sur tout le plateau) à chaque phase de temps court. Consomme 1 unité de pétrole pour attaquer, la cible perd systématiquement 2 santé",
+        "Recharge d'1 munition supplémentaire en phase de récolte à toutes les unités amies adjacentes",
+        "La ville est considérée en état de siège si 4 unités ennemies sont adjacentes à la ville. La production de pétrole est réduite de 5.",
+        "La ville est considérée en état de siège si 4 unités ennemies sont adjacentes à la ville. La production de pétrole est réduite de 5.",
+        "Soigne 1 santé supplémentaire en phase récolte à toutes les unités amies adjacentes"
+
+    };
+    public CardName Card;
+    public CardTypeI TYPEI;
+    public CardTypeII TYPEII;
     private int SteelCost;
     private int EnergyCost;
     private int BrickCost;
@@ -91,11 +144,11 @@ public class Card_script : MonoBehaviour
     private int Aim_limit;
     private int R_limit;
     private int SpecialEffect;
+    private string CardDescription;
     // Start is called before the first frame update
     void Start()
     {
-        //int rand = Random.Range(0,49);
-        int rand =5;
+        int rand = Random.Range(0,49);
         Debug.Log(rand);
         SetCardParameters(rand);
     }
@@ -123,14 +176,12 @@ public class Card_script : MonoBehaviour
     Aim_limit           = cardsProperties[Cardnumber,14];
     R_limit             = cardsProperties[Cardnumber,15];
     SpecialEffect       = cardsProperties[Cardnumber,16];
-    Debug.Log(Card);
-    Debug.Log(TYPEI);
-    Debug.Log(TYPEII);
-    Debug.Log(SteelCost);
+    CardDescription     = CardDescriptions[Cardnumber];
+    //Debug.Log(Card);Debug.Log(TYPEI);Debug.Log(CardDescription);
     }
     public void CardChildGOCreation()
     {
-        /*switch(WhatTypeIsThisCard(Card))
+        switch(TYPEI)
         {
             case CardTypeI.Building:
                 //Instantiates a BUILDING Prefab with NO script in it.
@@ -146,24 +197,53 @@ public class Card_script : MonoBehaviour
                 //Add ResourceManager to new created CardChildGO and set-it up
                 ResourceManagerCreation(Card,UpdateGO);
                 break;
-        }*/
+        }
     }
    
     public void ResourceManagerCreation(CardName Card,GameObject CardChildGO)
     {
         //instantiates ResourceManager_script
         ResourceManager_script ResourceManager = CardChildGO.AddComponent<ResourceManager_script>();
-        
+        ResourceManager.SetUpCost(SteelCost, EnergyCost,BrickCost,MoneyCost);
+    }
+    private Batiment_script.BuildingType ConvertTYPEIItoBatimentType(CardTypeII TYPEII)
+    {
+        Batiment_script.BuildingType returnValue;
+        returnValue = Batiment_script.BuildingType.Production;
+        switch(TYPEII)
+        {
+            case CardTypeII.TEST:
+                returnValue = Batiment_script.BuildingType.Production;
+                break;
+            case CardTypeII.Production:
+                returnValue = Batiment_script.BuildingType.Production;
+                break;
+            case CardTypeII.Unlock:
+                returnValue = Batiment_script.BuildingType.Unlock;
+                break;
+            case CardTypeII.Attack:
+                returnValue = Batiment_script.BuildingType.Attack;
+                break;
+            case CardTypeII.Reload:
+                returnValue = Batiment_script.BuildingType.Reload;
+                break;
+            case CardTypeII.Defense:
+                returnValue = Batiment_script.BuildingType.Defense;
+                break;
+            case CardTypeII.Bonus:
+                returnValue = Batiment_script.BuildingType.Bonus;
+                break;
+        }
+        return returnValue;
     }
     public void SetUpBuilding(CardName Card,GameObject CardChildGO)
     //instantiates Batiment_script
     {
         //instantiates BuildingStat_script
         Batiment_script BuildingStat = CardChildGO.AddComponent<Batiment_script>();
-        /*
-        Set_up_batiment_value(
-        Card_script.CardName Card, Batiment_script.BuildingType Set_up_type, float Set_up_H_limit,
-        float Set_up_A_limit, float Set_up_Aim_limit, float Set_up_spawn)*/
+       
+        BuildingStat.Set_up_batiment_value(Card,ConvertTYPEIItoBatimentType(TYPEII), H_limit,A_limit,Aim_limit,SpawnTime);
+        
         
        
 
